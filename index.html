@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#3b5bdb" />
-  <title>Download Liopol Media Fetch — Android &amp; Windows</title>
-  <meta name="description" content="Download Liopol Media Fetch by ShemaLabs for Android (.apk) and Windows 64-bit (.msi). Search, stream previews, and download videos or MP3 audio from 1,000+ platforms." />
+  <title>LMF Downloader — Download for Android &amp; Windows</title>
+  <meta name="description" content="Download LMF Downloader by ShemaLabs for Android (.apk) and Windows PC (.msi). Search, preview inline, and save videos or MP3 audio from 1,000+ platforms." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233b5bdb'/%3E%3Cpath d='M48 40v6a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4v-6M22 28l10 10 10-10M32 38V14' fill='none' stroke='%23fff' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <style>
     :root {
@@ -16,12 +16,10 @@
       --muted: #526077;
       --border: #dfe6f2;
       --accent: #3b5bdb;
-      --accent-hover: #2f4cc0;
       --accent-soft: #eef2ff;
       --green: #12b886;
       --shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0b1120;
@@ -31,265 +29,171 @@
         --muted: #9aaac4;
         --border: #253453;
         --accent: #4c6ef5;
-        --accent-hover: #5c7cfa;
         --accent-soft: rgba(76, 110, 245, 0.16);
         --shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
       }
     }
-
     * { box-sizing: border-box; }
-
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
       background:
-        radial-gradient(900px 420px at 50% -120px, rgba(59, 91, 219, 0.14), transparent 70%),
+        radial-gradient(960px 420px at 50% -120px, rgba(59, 91, 219, 0.14), transparent 70%),
         var(--bg);
       color: var(--text);
-      line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      line-height: 1.55;
     }
-
-    .container {
-      width: 100%;
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 36px 20px 48px;
-      flex: 1;
+    .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px 56px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; margin-bottom: 28px; flex-wrap: wrap;
     }
-
-    .brand-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 34px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--text);
-    }
-
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
     .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
+      width: 44px; height: 44px; border-radius: 13px;
       background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
-      color: #fff;
-      display: grid;
-      place-items: center;
+      color: #fff; display: grid; place-items: center;
       box-shadow: 0 8px 18px rgba(59, 91, 219, 0.28);
-      flex-shrink: 0;
     }
-
-    .brand-title {
-      font-weight: 800;
-      font-size: 1.08rem;
-      letter-spacing: -0.01em;
-      display: block;
-      line-height: 1.15;
+    .brand-title { font-weight: 800; font-size: 1.12rem; display: block; line-height: 1.1; }
+    .brand-sub { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+    .nav-links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
     }
-
-    .brand-sub {
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
+    .nav-links a:hover { color: var(--accent); }
     .version-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text);
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px;
+      border-radius: 999px; background: var(--surface); border: 1px solid var(--border);
+      font-size: 0.82rem; font-weight: 600; color: var(--text) !important;
     }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
 
     .hero-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 32px 26px;
-      box-shadow: var(--shadow);
-      text-align: center;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+      padding: 36px 28px; box-shadow: var(--shadow); text-align: center;
     }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.65rem, 4vw, 2.3rem);
-      letter-spacing: -0.025em;
-      line-height: 1.18;
-    }
-
-    .subtitle {
-      margin: 0 auto 28px;
-      max-width: 540px;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .download-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    @media (max-width: 620px) {
+    h1 { margin: 0 0 12px; font-size: clamp(1.85rem, 4vw, 2.55rem); letter-spacing: -0.025em; line-height: 1.15; }
+    .subtitle { margin: 0 auto 28px; max-width: 650px; color: var(--muted); font-size: 1.03rem; }
+    .download-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; max-width: 760px; margin: 0 auto 18px; }
+    @media (max-width: 640px) {
       .download-grid { grid-template-columns: 1fr; }
-      .hero-card { padding: 24px 18px; }
+      .hero-card { padding: 26px 18px; }
     }
-
     .dl-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 18px 16px;
-      border-radius: 16px;
-      text-decoration: none;
-      transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, border-color 0.14s ease;
-      border: 1px solid var(--border);
-      background: var(--surface-soft);
-      color: var(--text);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 18px 16px; border-radius: 16px; text-decoration: none;
+      border: 1px solid var(--border); background: var(--surface-soft); color: var(--text);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
     }
-
-    .dl-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-      box-shadow: 0 10px 24px rgba(59, 91, 219, 0.14);
-    }
-
+    .dl-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 24px rgba(59, 91, 219, 0.14); }
     .dl-card.is-primary {
-      background: linear-gradient(135deg, #4263eb, #364fc7);
-      border-color: transparent;
-      color: #ffffff;
-      box-shadow: 0 12px 26px rgba(59, 91, 219, 0.30);
+      background: linear-gradient(135deg, #4263eb, #364fc7); border-color: transparent;
+      color: #fff; box-shadow: 0 12px 26px rgba(59, 91, 219, 0.30);
+    }
+    .dl-platform { display: inline-flex; align-items: center; gap: 8px; font-size: 1.06rem; font-weight: 700; }
+    .dl-meta { font-size: 0.82rem; opacity: 0.86; }
+    .stats-strip {
+      display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+      margin-top: 8px; font-size: 0.85rem; color: var(--muted);
+    }
+    .stats-strip strong { color: var(--text); }
+
+    .section { margin-top: 46px; }
+    .section-head { margin-bottom: 18px; }
+    .section-head h2 { margin: 0 0 6px; font-size: 1.45rem; letter-spacing: -0.02em; }
+    .section-head p { margin: 0; color: var(--muted); }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    @media (max-width: 820px) { .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 18px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .card p, .card li { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    @media (max-width: 860px) { .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 520px) { .steps-grid { grid-template-columns: 1fr; } }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 999px; background: var(--accent-soft);
+      color: var(--accent); font-weight: 800; font-size: 0.85rem;
+      display: grid; place-items: center; margin-bottom: 10px;
     }
 
-    .dl-card.is-primary:hover {
-      background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
-      box-shadow: 0 14px 30px rgba(59, 91, 219, 0.38);
+    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .pill-btn {
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      padding: 7px 14px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
     }
+    .pill-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    .dl-platform {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.06rem;
-      font-weight: 700;
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    @media (max-width: 860px) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
+    .shot-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease;
     }
-
-    .dl-meta {
-      font-size: 0.82rem;
-      opacity: 0.84;
+    .shot-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .shot-card.is-wide { grid-column: span 2; }
+    @media (max-width: 560px) { .shot-card.is-wide { grid-column: span 1; } }
+    .shot-media {
+      background: var(--surface-soft); display: flex; align-items: center; justify-content: center;
+      padding: 10px; max-height: 360px; overflow: hidden;
     }
-
-    .meta-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 8px;
+    .shot-media img {
+      max-width: 100%; max-height: 340px; width: auto; height: auto; border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
     }
-
-    .meta-links a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
+    .shot-body { padding: 14px 16px; }
+    .shot-tag {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 999px; margin-bottom: 6px;
     }
+    .shot-body h3 { margin: 0 0 4px; font-size: 0.96rem; }
+    .shot-body p { margin: 0; font-size: 0.84rem; color: var(--muted); }
+    .hidden { display: none !important; }
 
-    .meta-links a:hover { text-decoration: underline; }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    @media (max-width: 620px) {
-      .section-grid { grid-template-columns: 1fr; }
-    }
-
-    .info-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 20px;
-    }
-
-    .info-card h2 {
-      margin: 0 0 8px;
-      font-size: 0.96rem;
-      font-weight: 700;
-    }
-
-    .info-card ol, .info-card ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    .info-card li + li { margin-top: 5px; }
+    .guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    @media (max-width: 680px) { .guide-grid { grid-template-columns: 1fr; } }
+    .guide-list { margin: 8px 0 0; padding-left: 18px; }
+    .guide-list li + li { margin-top: 7px; }
 
     .checksum-box {
-      margin-top: 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 18px;
-      font-size: 0.8rem;
-      color: var(--muted);
+      margin-top: 24px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px 18px; font-size: 0.82rem; color: var(--muted);
+    }
+    .checksum-box summary { cursor: pointer; font-weight: 600; color: var(--text); }
+    .checksum-item { margin-top: 8px; word-break: break-all; font-family: ui-monospace, Consolas, monospace; font-size: 0.76rem; }
+
+    .lightbox {
+      position: fixed; inset: 0; background: rgba(7, 11, 20, 0.88);
+      display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 999;
+    }
+    .lightbox-inner {
+      max-width: 92vw; max-height: 92vh; text-align: center; position: relative;
+    }
+    .lightbox-inner img {
+      max-width: 100%; max-height: 80vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .lightbox-caption { color: #eef3ff; margin-top: 10px; font-size: 0.95rem; font-weight: 600; }
+    .lightbox-close {
+      position: fixed; top: 18px; right: 20px; width: 40px; height: 40px;
+      border-radius: 999px; border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(15, 23, 42, 0.85); color: #fff; font-size: 1.2rem; cursor: pointer;
     }
 
-    .checksum-box summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .checksum-item {
-      margin-top: 8px;
-      word-break: break-all;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.76rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 16px 20px 28px;
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
+    footer { text-align: center; padding: 24px 20px 36px; color: var(--muted); font-size: 0.84rem; }
   </style>
 </head>
 <body>
-  <main class="container">
-    <header class="brand-row">
-      <a class="brand" href="#top">
+  <div class="container">
+    <header class="topbar">
+      <a class="brand" href="#">
         <span class="brand-icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -298,91 +202,277 @@
           </svg>
         </span>
         <span>
-          <span class="brand-title">Liopol Media Fetch</span>
+          <span class="brand-title">LMF Downloader</span>
           <span class="brand-sub">by ShemaLabs</span>
         </span>
       </a>
-      <a class="version-badge" id="releaseTagBadge" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/tag/v1.0.2" target="_blank" rel="noopener">
-        <span class="live-dot" aria-hidden="true"></span>
-        <span id="releaseTagText">Release v1.0.2</span>
-      </a>
+      <nav class="nav-links" aria-label="Page navigation">
+        <a href="#about">About</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#guides">Guides</a>
+        <a class="version-badge" id="releaseTagBadge" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/tag/v1.0.2" target="_blank" rel="noopener">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span id="releaseTagText">Release v1.0.2</span>
+        </a>
+      </nav>
     </header>
 
-    <section class="hero-card" aria-labelledby="heroHeading">
-      <h1 id="heroHeading">Download Liopol Media Fetch</h1>
+    <section class="hero-card">
+      <h1>LMF Downloader</h1>
       <p class="subtitle">
-        Fast video &amp; MP3 downloader with live trending discovery, instant search, playlist inspection, and background downloads across 1,000+ supported sites.
+        Search, stream previews, and save HD videos or MP3 audio directly onto your Android phone or Windows PC—with built-in trending discovery, batch playlists, background downloads, and instant Android link sharing.
       </p>
 
       <div class="download-grid">
-        <a
-          class="dl-card is-primary"
-          id="apkDownloadCard"
-          href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-android.apk"
-        >
+        <a class="dl-card is-primary" id="apkDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-android.apk">
           <span class="dl-platform">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="7" y="2" width="10" height="20" rx="2"/>
-              <line x1="12" y1="18" x2="12.01" y2="18"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
             Download for Android (.apk)
           </span>
-          <span class="dl-meta" id="apkMeta">v1.0.2 &bull; 111.34 MB &bull; Android 7.0+ (ARM64 &amp; x86_64)</span>
+          <span class="dl-meta" id="apkMeta">v1.0.2 &bull; 111.34 MB &bull; Android 7.0+</span>
         </a>
 
-        <a
-          class="dl-card"
-          id="msiDownloadCard"
-          href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-win64.msi"
-        >
+        <a class="dl-card" id="msiDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-win64.msi">
           <span class="dl-platform">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="3" width="20" height="14" rx="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/>
-              <line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             Download for Windows (.msi)
           </span>
-          <span class="dl-meta" id="msiMeta">v1.0.2 &bull; 535.15 MB &bull; Windows 10 / 11 (64-bit)</span>
+          <span class="dl-meta" id="msiMeta">v1.0.2 &bull; 535.14 MB &bull; Windows 10/11 64-bit</span>
         </a>
       </div>
 
-      <div class="meta-links">
-        <a href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases" target="_blank" rel="noopener">All Versions &amp; Release Notes</a>
+      <div class="stats-strip">
+        <span id="liveDownloadStats">Downloads tracked live via official releases</span>
         <span>&bull;</span>
-        <span>Built-in FFmpeg &amp; yt-dlp engine included</span>
+        <a href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 600;">View Release Notes &amp; All Versions</a>
       </div>
     </section>
 
-    <div class="section-grid">
-      <article class="info-card">
-        <h2>Installing on Android</h2>
-        <ol>
-          <li>Tap <strong>Download for Android (.apk)</strong> above.</li>
-          <li>Open the finished file and allow installs from your browser when prompted.</li>
-          <li>Share links directly from YouTube, Facebook, TikTok, or Instagram into Liopol Media Fetch.</li>
-        </ol>
-      </article>
+    <section class="section" id="about">
+      <div class="section-head">
+        <h2>What LMF Downloader Is All About</h2>
+        <p>Built by ShemaLabs to give you a clean, private, all-in-one media downloader right on your device—no cloud upload queues, no accounts, and no ads.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="card">
+          <h3>Live Trending &amp; Fast Search</h3>
+          <p>Browse rotating trending videos (Music, Gaming, Tech, News) on Home or search videos and playlists across YouTube, Facebook, TikTok, Instagram, and 1,000+ platforms.</p>
+        </article>
+        <article class="card">
+          <h3>Inline Preview &amp; Fullscreen</h3>
+          <p>Tap any thumbnail on mobile to preview clips straight inside the card without pop-ups, and expand widescreen videos cleanly into landscape fullscreen.</p>
+        </article>
+        <article class="card">
+          <h3>Share From Any Mobile App</h3>
+          <p>Tap Share inside YouTube, Facebook, TikTok, or Instagram and choose LMF Downloader—the link opens and inspects automatically ready to save.</p>
+        </article>
+        <article class="card">
+          <h3>HD Video &amp; Crisp MP3 Audio</h3>
+          <p>Download highest available or preferred video resolution cleanly merged into MP4, or extract high-bitrate MP3 audio files offline.</p>
+        </article>
+        <article class="card">
+          <h3>Background Queue &amp; Recovery</h3>
+          <p>Dismiss the Live Downloads dock while files keep downloading cleanly in the background, complete with Android alerts and failed transfer recovery.</p>
+        </article>
+        <article class="card">
+          <h3>Light, Dark &amp; Offline Ready</h3>
+          <p>Switch seamlessly between Light and Dark themes, monitor your internet status at a glance from the header dot, and play saved files anytime.</p>
+        </article>
+      </div>
+    </section>
 
-      <article class="info-card">
-        <h2>Installing on Windows PC</h2>
-        <ol>
-          <li>Click <strong>Download for Windows (.msi)</strong> above.</li>
-          <li>Run the installer. If Windows SmartScreen asks, click <strong>More info &rarr; Run anyway</strong>.</li>
-          <li>Launch <strong>Liopol Media Fetch</strong> from your Start Menu or Desktop.</li>
-        </ol>
-      </article>
+    <section class="section" id="how-it-works">
+      <div class="section-head">
+        <h2>How LMF Downloader Works</h2>
+        <p>Everything runs locally inside the app on your own Android phone or Windows PC—nothing gets routed through third-party websites.</p>
+      </div>
+      <div class="steps-grid">
+        <article class="card">
+          <div class="step-num">1</div>
+          <h3>Find or Share</h3>
+          <p>Pick a trending clip, search keywords, paste a playlist/video link, or share straight from another Android app.</p>
+        </article>
+        <article class="card">
+          <div class="step-num">2</div>
+          <h3>Pick Your Format</h3>
+          <p>Tap Download to choose Video or MP3 audio quality, or tap + Queue to line up multiple downloads at once.</p>
+        </article>
+        <article class="card">
+          <div class="step-num">3</div>
+          <h3>Local Processing</h3>
+          <p>Our built-in media engine fetches high-speed audio/video streams and combines or converts them privately right on your device.</p>
+        </article>
+        <article class="card">
+          <div class="step-num">4</div>
+          <h3>Play &amp; Organize</h3>
+          <p>Saved files land in your Downloaded Files library (and your phone Downloads folder on Android) ready to watch offline.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="section-head">
+        <h2>Screenshots Across Every Page</h2>
+        <p>Click any screenshot to enlarge and inspect every view of LMF Downloader on Mobile and Windows PC.</p>
+      </div>
+
+      <div class="filter-pills" role="tablist" aria-label="Filter screenshots">
+        <button class="pill-btn active" type="button" data-filter="all">All Screens (9)</button>
+        <button class="pill-btn" type="button" data-filter="mobile">Android Mobile (8)</button>
+        <button class="pill-btn" type="button" data-filter="desktop">Windows Desktop (1)</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <article class="shot-card" data-platform="mobile" data-title="Home &amp; Trending Feed (Android)">
+          <div class="shot-media"><img src="screenshots/android-home.png" alt="LMF Downloader Home screen with Trending Videos and top Search bar" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Home Page</span>
+            <h3>Home &amp; Trending Videos</h3>
+            <p>Top search bar, live connectivity status dot, category pills, and instant Refresh.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Inline Card Video Preview (Android)">
+          <div class="shot-media"><img src="screenshots/android-player.png" alt="LMF Downloader inline video playback directly inside a card with Fullscreen toggle" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Inline Player</span>
+            <h3>Tap-to-Play Inside Any Card</h3>
+            <p>Plays videos inline right inside the feed with one-tap Fullscreen landscape rotation.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Multi-Platform Search Results (Android)">
+          <div class="shot-media"><img src="screenshots/android-search.png" alt="LMF Downloader search results with platform filter pills and compact action buttons" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Search Page</span>
+            <h3>Instant Multi-Site Search</h3>
+            <p>Filter results by platform and save with compact + Queue and Download actions.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Transfer Queue &amp; URL Intake (Android)">
+          <div class="shot-media"><img src="screenshots/android-queue.png" alt="LMF Downloader Queue page with URL intake box, playlist inspector, and output settings" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Queue Page</span>
+            <h3>URL Intake &amp; Playlists</h3>
+            <p>Paste one or many links, inspect playlists, pick Video or MP3, and set quality profiles.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="History &amp; Transfer Recovery (Android)">
+          <div class="shot-media"><img src="screenshots/android-history.png" alt="LMF Downloader History page with completed transfers and interrupted download recovery" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">History Page</span>
+            <h3>History &amp; Recovery</h3>
+            <p>Filter completed or failed attempts, one-tap Re-download, or Continue interrupted files.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Downloaded Files Library (Android)">
+          <div class="shot-media"><img src="screenshots/android-files.png" alt="LMF Downloader Downloaded Files library showing Play, Save As, and folder access" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Files Page</span>
+            <h3>Downloaded Media Library</h3>
+            <p>Search finished MP4 and MP3 files, play directly in-app, or export with Save As.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Settings &amp; Preferences (Android)">
+          <div class="shot-media"><img src="screenshots/android-settings.png" alt="LMF Downloader Settings modal showing default quality, notifications, and auto-export toggles" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Settings Modal</span>
+            <h3>Preferences &amp; Alerts</h3>
+            <p>Set default Video/MP3 quality, floating progress dock, notifications, and folder auto-export.</p>
+          </div>
+        </article>
+
+        <article class="shot-card" data-platform="mobile" data-title="Dark Mode Experience (Android)">
+          <div class="shot-media"><img src="screenshots/android-dark.png" alt="LMF Downloader Dark theme search screen" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Dark Theme</span>
+            <h3>One-Tap Dark Mode</h3>
+            <p>Comfortable high-contrast dark theme across Home, Search, Queue, History, and Files.</p>
+          </div>
+        </article>
+
+        <article class="shot-card is-wide" data-platform="desktop" data-title="LMF Downloader Windows Desktop App">
+          <div class="shot-media"><img src="screenshots/desktop-home.png" alt="LMF Downloader desktop application window for Windows 10 and 11" loading="lazy" /></div>
+          <div class="shot-body">
+            <span class="shot-tag">Windows PC</span>
+            <h3>Desktop Application Window</h3>
+            <p>Full-width Windows PC layout with top navigation tabs, trending discovery, preview player, and download controls.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="guides">
+      <div class="section-head">
+        <h2>Step-by-Step Installation &amp; User Guides</h2>
+        <p>Follow these quick steps to install and start saving videos or music in under two minutes.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="card">
+          <h3>How to Install on Android</h3>
+          <ol class="guide-list">
+            <li>Tap <strong>Download for Android (.apk)</strong> at the top of this page.</li>
+            <li>Open the downloaded <code>LiopolMediaFetch-1.0.2-android.apk</code> file from your notifications or Files app.</li>
+            <li>If Android asks permission to install from your browser, tap <strong>Settings &rarr; Allow from this source</strong> and go back.</li>
+            <li>Tap <strong>Install</strong>, then open <strong>LMF Downloader</strong> and allow notifications if you want background completion alerts.</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h3>How to Install on Windows PC</h3>
+          <ol class="guide-list">
+            <li>Click <strong>Download for Windows (.msi)</strong> at the top of this page.</li>
+            <li>Double-click the downloaded <code>LiopolMediaFetch-1.0.2-win64.msi</code> installer.</li>
+            <li>If Windows Defender SmartScreen prompts because the app is new, click <strong>More info &rarr; Run anyway</strong>.</li>
+            <li>Finish the setup wizard and open <strong>LMF Downloader</strong> from your Start Menu or Desktop shortcut.</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h3>How to Use: Search, Preview &amp; Download</h3>
+          <ol class="guide-list">
+            <li>Open <strong>Home</strong> to browse trending clips across categories, or type keywords / paste any supported video link into the top search bar.</li>
+            <li>Tap any video thumbnail on mobile (or click <strong>Play Preview</strong> on PC) to watch first—tap <strong>Full</strong> to rotate into fullscreen.</li>
+            <li>Tap <strong>Download</strong> and choose Video quality or MP3 Audio, or tap <strong>+ Queue</strong> to batch multiple files.</li>
+            <li>Dismiss the floating <strong>Live Downloads</strong> bar anytime—your transfers keep running cleanly in the background.</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h3>How to Use: Android Share, Playlists &amp; Recovery</h3>
+          <ol class="guide-list">
+            <li><strong>Share from other apps:</strong> Inside YouTube, TikTok, Instagram, or Facebook, tap <strong>Share &rarr; LMF Downloader</strong> to inspect and download immediately.</li>
+            <li><strong>Batch Playlists:</strong> Open the <strong>Queue</strong> tab, paste a playlist URL, click <strong>Inspect Playlist</strong>, and pick exact tracks to download together.</li>
+            <li><strong>Recover Interrupted Files:</strong> Open the <strong>History</strong> tab to view past transfers, re-download finished items, or resume interrupted ones.</li>
+            <li><strong>Play Offline:</strong> Visit the <strong>Files</strong> tab (or your device's Downloads folder) to play saved videos/MP3s anytime—even offline.</li>
+          </ol>
+        </article>
+      </div>
+
+      <details class="checksum-box">
+        <summary>Verify Installer Checksums (SHA-256)</summary>
+        <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-android.apk:</strong> 84b4a342027899f5c4ed9e3f116825499cebc181839704b3e67f3d9c96e80627</div>
+        <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-win64.msi:</strong> 0a818c613f042272ea92092936dd31237855076db9e69423afd70f2fe51d9a72</div>
+      </details>
+    </section>
+  </div>
+
+  <div class="lightbox hidden" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+    <button class="lightbox-close" id="lightboxCloseBtn" type="button" aria-label="Close">&times;</button>
+    <div class="lightbox-inner">
+      <img id="lightboxImg" src="" alt="" />
+      <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
-
-    <details class="checksum-box">
-      <summary>Verify Download Checksums (SHA-256)</summary>
-      <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-android.apk:</strong> 84b4a342027899f5c4ed9e3f116825499cebc181839704b3e67f3d9c96e80627</div>
-      <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-win64.msi:</strong> 0a818c613f042272ea92092936dd31237855076db9e69423afd70f2fe51d9a72</div>
-    </details>
-  </main>
+  </div>
 
   <footer>
-    &copy; 2026 ShemaLabs &bull; Liopol Media Fetch
+    &copy; 2026 ShemaLabs &bull; LMF Downloader &bull; <a href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases" style="color: var(--accent); text-decoration: none;">Releases</a>
   </footer>
 
   <script>
@@ -395,27 +485,78 @@
         msiCard.classList.add("is-primary");
       }
 
-      fetch("https://api.github.com/repos/IsaacMatthewMethods/liopol-media-fetch/releases/latest")
+      const pills = document.querySelectorAll(".pill-btn");
+      const cards = document.querySelectorAll(".shot-card");
+      pills.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const f = btn.getAttribute("data-filter");
+          pills.forEach(function (p) { p.classList.remove("active"); });
+          btn.classList.add("active");
+          cards.forEach(function (c) {
+            if (f === "all" || c.getAttribute("data-platform") === f) {
+              c.classList.remove("hidden");
+            } else {
+              c.classList.add("hidden");
+            }
+          });
+        });
+      });
+
+      const modal = document.getElementById("lightboxModal");
+      const lbImg = document.getElementById("lightboxImg");
+      const lbCap = document.getElementById("lightboxCaption");
+      const lbClose = document.getElementById("lightboxCloseBtn");
+      cards.forEach(function (c) {
+        c.addEventListener("click", function () {
+          const img = c.querySelector("img");
+          if (!img) return;
+          lbImg.src = img.src;
+          lbImg.alt = img.alt || "";
+          lbCap.textContent = c.getAttribute("data-title") || "";
+          modal.classList.remove("hidden");
+        });
+      });
+      function closeLb() { modal.classList.add("hidden"); }
+      if (lbClose) lbClose.addEventListener("click", closeLb);
+      if (modal) modal.addEventListener("click", function (e) { if (e.target === modal) closeLb(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLb(); });
+
+      fetch("https://api.github.com/repos/IsaacMatthewMethods/liopol-media-fetch/releases")
         .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (rel) {
-          if (!rel || !Array.isArray(rel.assets)) return;
-          const tag = rel.tag_name || "v1.0.2";
+        .then(function (rels) {
+          if (!Array.isArray(rels) || !rels.length) return;
+          const latest = rels[0];
+          const tag = latest.tag_name || "v1.0.2";
           const tagBadge = document.getElementById("releaseTagBadge");
           const tagText = document.getElementById("releaseTagText");
-          if (tagBadge && rel.html_url) tagBadge.href = rel.html_url;
+          if (tagBadge && latest.html_url) tagBadge.href = latest.html_url;
           if (tagText) tagText.textContent = "Release " + tag;
 
-          rel.assets.forEach(function (a) {
+          let totalApk = 0, totalMsi = 0;
+          rels.forEach(function (rel) {
+            (rel.assets || []).forEach(function (a) {
+              if (a.state !== "uploaded") return;
+              if (a.name.endsWith(".apk")) totalApk += (a.download_count || 0);
+              if (a.name.endsWith(".msi")) totalMsi += (a.download_count || 0);
+            });
+          });
+
+          (latest.assets || []).forEach(function (a) {
             if (a.state !== "uploaded" || !a.browser_download_url) return;
             const mb = (a.size / (1024 * 1024)).toFixed(2) + " MB";
             if (a.name.endsWith(".apk") && apkCard) {
               apkCard.href = a.browser_download_url;
-              document.getElementById("apkMeta").textContent = tag + " \u2022 " + mb + " \u2022 Android 7.0+ (ARM64 & x86_64)";
+              document.getElementById("apkMeta").textContent = tag + " \u2022 " + mb + " \u2022 Android 7.0+";
             } else if (a.name.endsWith(".msi") && msiCard) {
               msiCard.href = a.browser_download_url;
-              document.getElementById("msiMeta").textContent = tag + " \u2022 " + mb + " \u2022 Windows 10 / 11 (64-bit)";
+              document.getElementById("msiMeta").textContent = tag + " \u2022 " + mb + " \u2022 Windows 10/11 64-bit";
             }
           });
+
+          const statsEl = document.getElementById("liveDownloadStats");
+          if (statsEl) {
+            statsEl.innerHTML = "<strong>" + (totalApk + totalMsi) + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
+          }
         })
         .catch(function () {});
     })();
