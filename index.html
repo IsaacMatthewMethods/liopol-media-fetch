@@ -10,33 +10,33 @@
   <style>
     :root {
       --bg: #f4f7fc;
-      --surface: rgba(255, 255, 255, 0.86);
+      --surface: rgba(255, 255, 255, 0.78);
       --surface-solid: #ffffff;
-      --surface-soft: rgba(248, 250, 253, 0.88);
+      --surface-soft: rgba(248, 250, 253, 0.82);
       --text: #0f172a;
       --muted: #526077;
-      --border: rgba(203, 214, 236, 0.85);
+      --border: rgba(196, 209, 234, 0.85);
       --accent: #3b5bdb;
       --accent-2: #12b886;
       --accent-soft: #eef2ff;
       --green: #12b886;
       --shadow: 0 22px 48px rgba(15, 23, 42, 0.08);
-      --glass-blur: blur(16px);
-      --spot-color: rgba(59, 91, 219, 0.11);
+      --glass-blur: blur(18px);
+      --spot-color: rgba(59, 91, 219, 0.13);
     }
     :root[data-theme="dark"] {
       --bg: #080d1a;
-      --surface: rgba(18, 27, 47, 0.84);
+      --surface: rgba(16, 24, 43, 0.76);
       --surface-solid: #121b2f;
-      --surface-soft: rgba(23, 35, 59, 0.88);
+      --surface-soft: rgba(23, 35, 59, 0.82);
       --text: #eef3ff;
       --muted: #9aaac4;
-      --border: rgba(45, 65, 104, 0.82);
+      --border: rgba(52, 74, 118, 0.82);
       --accent: #5c7cfa;
       --accent-2: #20c997;
       --accent-soft: rgba(76, 110, 245, 0.18);
       --shadow: 0 24px 54px rgba(0, 0, 0, 0.48);
-      --spot-color: rgba(92, 124, 250, 0.16);
+      --spot-color: rgba(92, 124, 250, 0.18);
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -1107,29 +1107,30 @@
           [1, 5, 6, 2], [3, 2, 6, 7], [4, 5, 1, 0]
         ];
 
-        // Distribute crisp 3D translucent crystals & orbital gyro rings around edges/depth
+        // Distribute crisp 3D translucent crystals & orbital gyro rings clearly inside viewport flanks & hero aura
         const polyhedra = [
-          { type: "oct",  bx: -0.44, by: -0.32, z: 540,  size: 54, rx: 0.2, ry: 0.4, rz: 0.1, sx: 0.42, sy: 0.68, sz: 0.25, hue: "primary", phase: 0.0 },
-          { type: "cube", bx:  0.45, by: -0.28, z: 620,  size: 46, rx: 0.6, ry: 0.2, rz: 0.5, sx: 0.36, sy: -0.52, sz: 0.30, hue: "teal", phase: 1.4 },
-          { type: "ring", bx: -0.46, by:  0.22, z: 580,  size: 62, rx: 1.0, ry: 0.3, rz: 0.2, sx: 0.48, sy: 0.35, sz: 0.22, hue: "violet", phase: 2.3 },
-          { type: "oct",  bx:  0.46, by:  0.26, z: 520,  size: 48, rx: 0.3, ry: 0.9, rz: 0.4, sx: -0.38, sy: 0.58, sz: 0.28, hue: "teal", phase: 3.1 },
-          { type: "ring", bx:  0.18, by: -0.42, z: 760,  size: 58, rx: 0.7, ry: 0.8, rz: 0.1, sx: 0.30, sy: 0.62, sz: -0.18, hue: "primary", phase: 4.0 },
-          { type: "cube", bx: -0.22, by:  0.40, z: 720,  size: 40, rx: 0.5, ry: 0.1, rz: 0.7, sx: 0.50, sy: 0.44, sz: -0.26, hue: "violet", phase: 5.2 },
-          { type: "oct",  bx:  0.04, by:  0.04, z: 980,  size: 68, rx: 0.2, ry: 0.6, rz: 0.3, sx: 0.24, sy: 0.46, sz: 0.16, hue: "primary", phase: 2.0 }
+          { type: "oct",  sxNorm: -0.45, syNorm: -0.26, z: 620, size: 42, rx: 0.3, ry: 0.5, rz: 0.2, sx: 0.46, sy: 0.72, sz: 0.28, hue: "primary", phase: 0.0 },
+          { type: "cube", sxNorm:  0.45, syNorm: -0.24, z: 640, size: 34, rx: 0.6, ry: 0.2, rz: 0.5, sx: 0.38, sy: -0.56, sz: 0.32, hue: "teal", phase: 1.4 },
+          { type: "ring", sxNorm: -0.44, syNorm:  0.24, z: 600, size: 52, rx: 1.0, ry: 0.3, rz: 0.2, sx: 0.52, sy: 0.38, sz: 0.24, hue: "violet", phase: 2.3 },
+          { type: "oct",  sxNorm:  0.44, syNorm:  0.26, z: 590, size: 40, rx: 0.4, ry: 0.9, rz: 0.4, sx: -0.42, sy: 0.64, sz: 0.30, hue: "teal", phase: 3.1 },
+          { type: "ring", sxNorm:  0.27, syNorm: -0.41, z: 720, size: 48, rx: 0.7, ry: 0.8, rz: 0.1, sx: 0.32, sy: 0.66, sz: -0.22, hue: "primary", phase: 4.0 },
+          { type: "cube", sxNorm: -0.29, syNorm: -0.39, z: 740, size: 30, rx: 0.5, ry: 0.1, rz: 0.7, sx: 0.54, sy: 0.48, sz: -0.26, hue: "violet", phase: 5.2 },
+          { type: "cube", sxNorm: -0.28, syNorm:  0.41, z: 700, size: 32, rx: 0.2, ry: 0.6, rz: 0.4, sx: -0.44, sy: 0.52, sz: 0.22, hue: "primary", phase: 1.9 },
+          { type: "ring", sxNorm:  0.25, syNorm:  0.40, z: 680, size: 44, rx: 0.9, ry: 0.4, rz: 0.6, sx: 0.40, sy: -0.48, sz: 0.30, hue: "violet", phase: 3.8 }
         ];
 
         // 3D Depth Constellation Nodes
         const nodes = [];
-        for (let i = 0; i < 34; i++) {
-          const angle = (i / 34) * Math.PI * 2;
+        for (let i = 0; i < 36; i++) {
+          const angle = (i / 36) * Math.PI * 2;
           nodes.push({
             x: (Math.random() - 0.5) * 1850,
             y: (Math.random() - 0.5) * 1150,
             z: 360 + Math.random() * 1100,
-            vx: Math.cos(angle) * (0.28 + Math.random() * 0.42),
-            vy: Math.sin(angle) * (0.24 + Math.random() * 0.38),
+            vx: Math.cos(angle) * (0.30 + Math.random() * 0.42),
+            vy: Math.sin(angle) * (0.26 + Math.random() * 0.38),
             vz: (Math.random() - 0.5) * 0.55,
-            radius: 2.4 + Math.random() * 3.8,
+            radius: 2.6 + Math.random() * 3.8,
             phase: Math.random() * Math.PI * 2,
             hue: i % 3 === 0 ? "teal" : (i % 5 === 0 ? "violet" : "primary")
           });
@@ -1142,22 +1143,22 @@
               primary: "92, 124, 250",
               teal: "32, 201, 151",
               violet: "167, 139, 250",
-              faceBase: 0.10,
-              faceSpan: 0.15,
-              edgeAlpha: 0.36,
-              linkAlpha: 0.20,
-              nodeAlpha: 0.52
+              faceBase: 0.14,
+              faceSpan: 0.20,
+              edgeAlpha: 0.52,
+              linkAlpha: 0.24,
+              nodeAlpha: 0.60
             };
           }
           return {
             primary: "59, 91, 219",
             teal: "13, 148, 136",
             violet: "124, 58, 237",
-            faceBase: 0.08,
-            faceSpan: 0.14,
-            edgeAlpha: 0.32,
-            linkAlpha: 0.16,
-            nodeAlpha: 0.44
+            faceBase: 0.12,
+            faceSpan: 0.18,
+            edgeAlpha: 0.44,
+            linkAlpha: 0.20,
+            nodeAlpha: 0.52
           };
         }
 
@@ -1194,11 +1195,12 @@
 
         function drawPolyhedron(shape, pal) {
           const rgb = pal[shape.hue];
-          const bobX = Math.sin(time * 0.8 + shape.phase) * 28;
-          const bobY = Math.cos(time * 0.7 + shape.phase) * 24 - (scrollRatio - 0.5) * 90;
-          const depthFactor = 750 / shape.z;
-          const cx = shape.bx * Math.max(width, 960) * 0.92 + bobX - ptrX * (62 * depthFactor);
-          const cy = shape.by * Math.max(height, 680) * 0.88 + bobY - ptrY * (44 * depthFactor);
+          const fov = Math.min(width, height) * 0.96 + 160;
+          const worldPerPx = shape.z / fov;
+          const bobX = Math.sin(time * 0.8 + shape.phase) * 26;
+          const bobY = Math.cos(time * 0.7 + shape.phase) * 22 - (scrollRatio - 0.5) * 80;
+          const cx = shape.sxNorm * width * worldPerPx + bobX - ptrX * 42;
+          const cy = shape.syNorm * height * worldPerPx + bobY - ptrY * 32;
           const cz = shape.z;
 
           const rx = shape.rx + time * shape.sx * (1 + boost * 1.4);
@@ -1432,10 +1434,10 @@
       const revealEls = document.querySelectorAll(".reveal-item");
       function revealVisibleNow() {
         const vh = window.innerHeight || 900;
-        const nearBottom = (window.scrollY + vh) >= (document.documentElement.scrollHeight - 80);
+        const nearBottom = (window.scrollY + vh) >= (document.documentElement.scrollHeight - 240);
         revealEls.forEach(function (el) {
           const rect = el.getBoundingClientRect();
-          if (nearBottom || rect.top < vh * 1.15) el.classList.add("is-visible");
+          if (nearBottom || rect.top < vh * 1.25) el.classList.add("is-visible");
         });
       }
       if ("IntersectionObserver" in window && !prefersReduced) {
