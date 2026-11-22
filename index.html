@@ -10,167 +10,581 @@
   <style>
     :root {
       --bg: #f4f7fc;
-      --surface: #ffffff;
-      --surface-soft: #f8fafd;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-solid: #ffffff;
+      --surface-soft: rgba(248, 250, 253, 0.88);
       --text: #0f172a;
       --muted: #526077;
-      --border: #dfe6f2;
+      --border: rgba(203, 214, 236, 0.85);
       --accent: #3b5bdb;
+      --accent-2: #12b886;
       --accent-soft: #eef2ff;
       --green: #12b886;
-      --shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+      --shadow: 0 22px 48px rgba(15, 23, 42, 0.08);
+      --glass-blur: blur(16px);
+      --spot-color: rgba(59, 91, 219, 0.11);
     }
     :root[data-theme="dark"] {
-      --bg: #0b1120;
-      --surface: #121b2f;
-      --surface-soft: #17233b;
+      --bg: #080d1a;
+      --surface: rgba(18, 27, 47, 0.84);
+      --surface-solid: #121b2f;
+      --surface-soft: rgba(23, 35, 59, 0.88);
       --text: #eef3ff;
       --muted: #9aaac4;
-      --border: #253453;
-      --accent: #4c6ef5;
-      --accent-soft: rgba(76, 110, 245, 0.16);
-      --shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+      --border: rgba(45, 65, 104, 0.82);
+      --accent: #5c7cfa;
+      --accent-2: #20c997;
+      --accent-soft: rgba(76, 110, 245, 0.18);
+      --shadow: 0 24px 54px rgba(0, 0, 0, 0.48);
+      --spot-color: rgba(92, 124, 250, 0.16);
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-      background:
-        radial-gradient(960px 420px at 50% -120px, rgba(59, 91, 219, 0.14), transparent 70%),
-        var(--bg);
+      background-color: var(--bg);
       color: var(--text);
       line-height: 1.55;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.3s ease;
     }
-    .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px 56px; }
+
+    /* Cinematic Multi-Layer 3D Animated Backdrop */
+    .bg-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .aurora-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(75px);
+      opacity: 0.45;
+      will-change: transform;
+      animation: auroraFloat 18s ease-in-out infinite alternate;
+    }
+    .aurora-orb.a1 {
+      width: 520px; height: 520px;
+      top: -160px; left: -100px;
+      background: radial-gradient(circle, rgba(76, 110, 245, 0.34), transparent 70%);
+    }
+    .aurora-orb.a2 {
+      width: 480px; height: 480px;
+      top: 12%; right: -120px;
+      background: radial-gradient(circle, rgba(18, 184, 134, 0.24), transparent 70%);
+      animation-delay: -6s;
+      animation-duration: 22s;
+    }
+    .aurora-orb.a3 {
+      width: 560px; height: 560px;
+      bottom: -220px; left: 28%;
+      background: radial-gradient(circle, rgba(116, 143, 252, 0.24), transparent 70%);
+      animation-delay: -11s;
+      animation-duration: 26s;
+    }
+    :root[data-theme="dark"] .aurora-orb.a1 {
+      background: radial-gradient(circle, rgba(76, 110, 245, 0.28), transparent 70%);
+    }
+    :root[data-theme="dark"] .aurora-orb.a2 {
+      background: radial-gradient(circle, rgba(32, 201, 151, 0.20), transparent 70%);
+    }
+    #bg3dCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    @keyframes auroraFloat {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(42px, 28px, 0) scale(1.08); }
+      100% { transform: translate3d(-28px, 48px, 0) scale(0.95); }
+    }
+
+    /* Foreground Layout Container */
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 20px 20px 64px;
+    }
+
+    /* Glassmorphic Topbar with Macro Slide-Down & Link Underlines */
     .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 14px; margin-bottom: 28px; flex-wrap: wrap;
+      position: sticky;
+      top: 12px;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding: 10px 16px;
+      border-radius: 18px;
+      background: var(--surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
+      flex-wrap: wrap;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+      animation: navDropIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+    .topbar.is-scrolled {
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+      border-color: rgba(59, 91, 219, 0.35);
+    }
+    @keyframes navDropIn {
+      from { opacity: 0; transform: translate3d(0, -18px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text);
+    }
     .brand-icon {
+      position: relative;
       width: 44px; height: 44px; border-radius: 13px;
       background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
       color: #fff; display: grid; place-items: center;
-      box-shadow: 0 8px 18px rgba(59, 91, 219, 0.28);
+      box-shadow: 0 8px 20px rgba(59, 91, 219, 0.32);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      animation: iconBreath 4.2s ease-in-out infinite;
+    }
+    .brand:hover .brand-icon {
+      transform: translateY(-2px) rotate(-6deg) scale(1.06);
+      box-shadow: 0 12px 28px rgba(59, 91, 219, 0.45);
+    }
+    .brand-arrow { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .brand:hover .brand-arrow { animation: arrowBounce 0.75s ease-in-out infinite; }
+    @keyframes iconBreath {
+      0%, 100% { box-shadow: 0 8px 20px rgba(59, 91, 219, 0.28); }
+      50% { box-shadow: 0 10px 28px rgba(59, 91, 219, 0.48), 0 0 0 4px rgba(59, 91, 219, 0.08); }
+    }
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
     }
     .brand-title { font-weight: 800; font-size: 1.12rem; display: block; line-height: 1.1; }
     .brand-sub { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
-    .nav-links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
-    }
-    .nav-links a:hover { color: var(--accent); }
-    .version-badge {
-      display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px;
-      border-radius: 999px; background: var(--surface); border: 1px solid var(--border);
-      font-size: 0.82rem; font-weight: 600; color: var(--text) !important;
-    }
-    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
 
-    .hero-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
-      padding: 36px 28px; box-shadow: var(--shadow); text-align: center;
+    .nav-links { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .nav-links a:not(.version-badge) {
+      position: relative;
+      color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;
+      padding: 4px 2px;
+      transition: color 0.2s ease;
     }
-    h1 { margin: 0 0 12px; font-size: clamp(1.85rem, 4vw, 2.55rem); letter-spacing: -0.025em; line-height: 1.15; }
-    .subtitle { margin: 0 auto 28px; max-width: 650px; color: var(--muted); font-size: 1.03rem; }
-    .download-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; max-width: 960px; margin: 0 auto 18px; }
-    @media (max-width: 820px) {
-      .download-grid { grid-template-columns: 1fr; }
-      .hero-card { padding: 26px 18px; }
+    .nav-links a:not(.version-badge)::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0; height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .dl-card {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-      padding: 18px 14px; border-radius: 16px; text-decoration: none; font-family: inherit; cursor: pointer;
-      border: 1px solid var(--border); background: var(--surface-soft); color: var(--text);
-      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    .nav-links a:not(.version-badge):hover { color: var(--accent); }
+    .nav-links a:not(.version-badge):hover::after { transform: scaleX(1); }
+
+    .version-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 13px;
+      border-radius: 999px; background: var(--surface-soft); border: 1px solid var(--border);
+      font-size: 0.82rem; font-weight: 700; color: var(--text) !important; text-decoration: none;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    .dl-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 24px rgba(59, 91, 219, 0.14); }
-    .dl-card.is-primary {
-      background: linear-gradient(135deg, #4263eb, #364fc7); border-color: transparent;
-      color: #fff; box-shadow: 0 12px 26px rgba(59, 91, 219, 0.30);
+    .version-badge:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: var(--accent);
+      box-shadow: 0 8px 18px rgba(59, 91, 219, 0.16);
     }
-    .dl-platform { display: inline-flex; align-items: center; gap: 9px; font-size: 1.01rem; font-weight: 700; text-align: center; }
-    .dl-meta { font-size: 0.80rem; opacity: 0.86; }
+    .live-dot {
+      position: relative;
+      width: 9px; height: 9px; border-radius: 50%; background: var(--green); display: inline-block;
+    }
+    .live-dot::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      opacity: 0;
+      animation: livePing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes livePing {
+      0% { transform: scale(0.7); opacity: 0.85; }
+      75%, 100% { transform: scale(2.1); opacity: 0; }
+    }
+
     .theme-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.95rem;
+      width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--surface-soft); color: var(--text); cursor: pointer; font-size: 1rem;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, background-color 0.25s ease;
     }
-    .theme-btn:hover { border-color: var(--accent); }
-    .popup-overlay {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.56);
-      display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
+    .theme-btn:hover { border-color: var(--accent); transform: rotate(22deg) scale(1.1); }
+    .theme-btn.is-spinning { transform: rotate(360deg) scale(1.15); }
+
+    /* Cinematic Hero Card with Interactive Spotlight & 3D Depth */
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 42px 28px 34px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      animation: heroRise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
     }
-    .popup-box {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
-      max-width: 400px; width: 100%; padding: 26px 24px; text-align: center; box-shadow: var(--shadow);
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 10%; right: 10%; height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, #4c6ef5, #12b886, #748ffc, transparent);
+      background-size: 200% 100%;
+      animation: shimmerBeam 5s linear infinite;
     }
-    .popup-box h3 { margin: 12px 0 8px; font-size: 1.25rem; }
-    .popup-box p { margin: 0 0 18px; color: var(--muted); font-size: 0.93rem; }
-    .popup-btn {
-      border: none; border-radius: 10px; padding: 10px 24px; font-weight: 700; font-size: 0.92rem;
-      background: var(--accent); color: #fff; cursor: pointer;
+    .hero-spotlight {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 35%), var(--spot-color), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
     }
+    .hero-card:hover .hero-spotlight { opacity: 1; }
+    @keyframes heroRise {
+      from { opacity: 0; transform: translate3d(0, 32px, 0) scale(0.97); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+    @keyframes shimmerBeam {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+    }
+    .kicker-spark {
+      display: inline-block;
+      animation: sparkSpin 5s linear infinite;
+    }
+    @keyframes sparkSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.18); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4.4vw, 2.85rem);
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      background: linear-gradient(120deg, var(--text) 15%, var(--accent) 52%, var(--accent-2) 78%, var(--text) 95%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both, titleFlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes titleFlow {
+      0% { background-position: 0% center; }
+      100% { background-position: 100% center; }
+    }
+    .subtitle {
+      margin: 0 auto 30px;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 1.04rem;
+      animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translate3d(0, 18px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    /* Interactive 3D Download / Action Cards */
+    .download-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      max-width: 970px;
+      margin: 0 auto 20px;
+      perspective: 1100px;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+    }
+    @media (max-width: 820px) {
+      .download-grid { grid-template-columns: 1fr; }
+      .hero-card { padding: 28px 18px 26px; }
+    }
+    .dl-card {
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+      padding: 20px 16px; border-radius: 18px; text-decoration: none; font-family: inherit; cursor: pointer;
+      border: 1px solid var(--border); background: var(--surface-soft); color: var(--text);
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.28s ease, background-color 0.25s ease;
+    }
+    .dl-card::after {
+      content: "";
+      position: absolute;
+      top: -60%; left: -80%; width: 55%; height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.36), transparent);
+      transform: rotate(22deg);
+      transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .dl-card:hover::after { left: 135%; }
+    .dl-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 18px 34px rgba(59, 91, 219, 0.18);
+    }
+    .dl-card:active { transform: scale(0.97) !important; }
+    .dl-card.is-primary {
+      background: linear-gradient(135deg, #4c6ef5, #364fc7);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(59, 91, 219, 0.34);
+    }
+    .dl-card.is-primary:hover {
+      box-shadow: 0 22px 42px rgba(59, 91, 219, 0.48);
+    }
+    .dl-platform {
+      display: inline-flex; align-items: center; gap: 10px; font-size: 1.01rem; font-weight: 700; text-align: center;
+      transform: translateZ(12px);
+    }
+    .dl-meta { font-size: 0.80rem; opacity: 0.88; transform: translateZ(6px); }
+
+    /* Custom Playful Icon Animations */
+    .icon-android {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center bottom;
+    }
+    #apkDownloadCard:hover .icon-android {
+      animation: androidWiggle 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    }
+    @keyframes androidWiggle {
+      0%, 100% { transform: rotate(0deg) translateY(0) scale(1); }
+      30% { transform: rotate(-10deg) translateY(-3px) scale(1.12); }
+      65% { transform: rotate(8deg) translateY(-2px) scale(1.1); }
+    }
+
+    .icon-windows rect, .icon-windows path {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+    }
+    #msiDownloadCard:hover .icon-windows {
+      animation: winTilt 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    #msiDownloadCard:hover .win-p1 { transform: translate(-1px, -1px); }
+    #msiDownloadCard:hover .win-p2 { transform: translate(1px, -1px); }
+    #msiDownloadCard:hover .win-p3 { transform: translate(-1px, 1px); }
+    #msiDownloadCard:hover .win-p4 { transform: translate(1px, 1px); }
+    @keyframes winTilt {
+      0% { transform: scale(1) rotate(0deg); }
+      55% { transform: scale(1.16) rotate(-6deg); }
+      100% { transform: scale(1.08) rotate(0deg); }
+    }
+
+    .icon-chrome {
+      transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #chromeExtBtn:hover .icon-chrome {
+      transform: rotate(360deg) scale(1.14);
+    }
+
+    /* Ripple Element */
+    .click-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: scale(0);
+      animation: rippleOut 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+    :root:not([data-theme="dark"]) .dl-card:not(.is-primary) .click-ripple {
+      background: rgba(59, 91, 219, 0.22);
+    }
+    @keyframes rippleOut {
+      to { transform: scale(4); opacity: 0; }
+    }
+
     .stats-strip {
-      display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
-      margin-top: 8px; font-size: 0.85rem; color: var(--muted);
+      display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center;
+      margin-top: 8px; padding: 7px 16px; border-radius: 999px;
+      background: var(--surface-soft); border: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--muted);
+      animation: fadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
     }
     .stats-strip strong { color: var(--text); }
 
-    .section { margin-top: 46px; }
-    .section-head { margin-bottom: 18px; }
-    .section-head h2 { margin: 0 0 6px; font-size: 1.45rem; letter-spacing: -0.02em; }
+    /* Sections & Scroll-Triggered Reveal Macro Choreography */
+    .section { margin-top: 52px; }
+    .section-head { margin-bottom: 20px; }
+    .section-head h2 { margin: 0 0 6px; font-size: 1.5rem; letter-spacing: -0.02em; }
     .section-head p { margin: 0; color: var(--muted); }
 
-    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .reveal-item {
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.97);
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: calc(var(--stagger, 0) * 65ms);
+    }
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
     @media (max-width: 820px) { .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 560px) { .feature-grid { grid-template-columns: 1fr; } }
+
     .card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 18px;
+      position: relative;
+      background: var(--surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 18px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(59, 91, 219, 0.55);
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.10);
+    }
+    :root[data-theme="dark"] .card:hover {
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.42);
+    }
+    .feat-badge {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: var(--accent-soft); color: var(--accent);
+      display: grid; place-items: center; margin-bottom: 12px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, color 0.25s ease;
+    }
+    .card:hover .feat-badge {
+      transform: scale(1.12) rotate(-6deg);
+      background: var(--accent);
+      color: #fff;
     }
     .card h3 { margin: 0 0 6px; font-size: 1rem; }
     .card p, .card li { margin: 0; color: var(--muted); font-size: 0.9rem; }
 
-    .steps-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    /* Interactive Animated Workflow Pipeline */
+    .steps-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
     @media (max-width: 860px) { .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 520px) { .steps-grid { grid-template-columns: 1fr; } }
     .step-num {
-      width: 28px; height: 28px; border-radius: 999px; background: var(--accent-soft);
-      color: var(--accent); font-weight: 800; font-size: 0.85rem;
-      display: grid; place-items: center; margin-bottom: 10px;
+      position: relative;
+      width: 34px; height: 34px; border-radius: 999px; background: var(--accent-soft);
+      color: var(--accent); font-weight: 800; font-size: 0.92rem;
+      display: grid; place-items: center; margin-bottom: 12px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, color 0.25s ease;
+    }
+    .step-num::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 999px;
+      border: 1.5px dashed var(--accent);
+      opacity: 0.35;
+      animation: orbitSpin 12s linear infinite;
+    }
+    .card:hover .step-num {
+      transform: scale(1.15);
+      background: var(--accent);
+      color: #fff;
+    }
+    .card:hover .step-num::after { opacity: 0.85; animation-duration: 3.5s; }
+    @keyframes orbitSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    /* Filter Pills & Animated Screenshot Gallery */
+    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
     .pill-btn {
       border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      padding: 7px 14px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+      padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    .pill-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pill-btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .pill-btn.active {
+      background: linear-gradient(135deg, #4c6ef5, #3b5bdb);
+      border-color: transparent; color: #fff;
+      box-shadow: 0 8px 20px rgba(59, 91, 219, 0.28);
+    }
 
     .gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
     @media (max-width: 860px) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
+
     .shot-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
-      transition: transform 0.14s ease, border-color 0.14s ease;
+      position: relative;
+      background: var(--surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.32s ease;
     }
-    .shot-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .shot-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: var(--accent);
+      box-shadow: 0 22px 42px rgba(15, 23, 42, 0.14);
+    }
     .shot-card.is-wide { grid-column: span 2; }
     @media (max-width: 560px) { .shot-card.is-wide { grid-column: span 1; } }
     .shot-media {
+      position: relative;
       background: var(--surface-soft); display: flex; align-items: center; justify-content: center;
-      padding: 10px; max-height: 360px; overflow: hidden;
+      padding: 12px; max-height: 360px; overflow: hidden;
     }
     .shot-media img {
-      max-width: 100%; max-height: 340px; width: auto; height: auto; border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+      max-width: 100%; max-height: 336px; width: auto; height: auto; border-radius: 11px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
+    .shot-card:hover .shot-media img { transform: scale(1.04); }
     .shot-body { padding: 14px 16px; }
     .shot-tag {
       display: inline-block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      color: var(--accent); background: var(--accent-soft); padding: 3px 8px; border-radius: 999px; margin-bottom: 6px;
+      color: var(--accent); background: var(--accent-soft); padding: 3px 9px; border-radius: 999px; margin-bottom: 6px;
     }
     .shot-body h3 { margin: 0 0 4px; font-size: 0.96rem; }
     .shot-body p { margin: 0; font-size: 0.84rem; color: var(--muted); }
@@ -183,40 +597,103 @@
 
     .checksum-box {
       margin-top: 24px; background: var(--surface); border: 1px solid var(--border);
+      backdrop-filter: var(--glass-blur);
       border-radius: 16px; padding: 14px 18px; font-size: 0.82rem; color: var(--muted);
     }
     .checksum-box summary { cursor: pointer; font-weight: 600; color: var(--text); }
     .checksum-item { margin-top: 8px; word-break: break-all; font-family: ui-monospace, Consolas, monospace; font-size: 0.76rem; }
 
+    /* Interactive Modals with Elastic Spring Entrance */
     .lightbox {
-      position: fixed; inset: 0; background: rgba(7, 11, 20, 0.88);
+      position: fixed; inset: 0; background: rgba(7, 11, 20, 0.86);
+      backdrop-filter: blur(8px);
       display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 999;
+      animation: fadeBackdrop 0.25s ease forwards;
     }
     .lightbox-inner {
       max-width: 92vw; max-height: 92vh; text-align: center; position: relative;
+      animation: popSpring 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     .lightbox-inner img {
-      max-width: 100%; max-height: 80vh; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      max-width: 100%; max-height: 80vh; border-radius: 14px; box-shadow: 0 22px 54px rgba(0,0,0,0.55);
     }
     .lightbox-caption { color: #eef3ff; margin-top: 10px; font-size: 0.95rem; font-weight: 600; }
     .lightbox-close {
-      position: fixed; top: 18px; right: 20px; width: 40px; height: 40px;
-      border-radius: 999px; border: 1px solid rgba(255,255,255,0.28);
-      background: rgba(15, 23, 42, 0.85); color: #fff; font-size: 1.2rem; cursor: pointer;
+      position: fixed; top: 18px; right: 20px; width: 42px; height: 42px;
+      border-radius: 999px; border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(15, 23, 42, 0.85); color: #fff; font-size: 1.25rem; cursor: pointer;
+      transition: transform 0.25s ease, background-color 0.2s ease;
+    }
+    .lightbox-close:hover { transform: rotate(90deg) scale(1.08); background: var(--accent); }
+
+    .popup-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.56);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
+      animation: fadeBackdrop 0.22s ease forwards;
+    }
+    .popup-box {
+      background: var(--surface-solid); border: 1px solid var(--border); border-radius: 22px;
+      max-width: 410px; width: 100%; padding: 28px 24px; text-align: center; box-shadow: var(--shadow);
+      animation: popSpring 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .popup-box svg { animation: chromeSpinModal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .popup-box h3 { margin: 14px 0 8px; font-size: 1.3rem; }
+    .popup-box p { margin: 0 0 20px; color: var(--muted); font-size: 0.94rem; }
+    .popup-btn {
+      border: none; border-radius: 12px; padding: 11px 28px; font-weight: 700; font-size: 0.94rem;
+      background: linear-gradient(135deg, #4c6ef5, #3b5bdb); color: #fff; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(59, 91, 219, 0.3);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .popup-btn:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 12px 26px rgba(59, 91, 219, 0.4); }
+    @keyframes fadeBackdrop { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popSpring {
+      from { opacity: 0; transform: scale(0.86) translateY(16px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes chromeSpinModal {
+      from { transform: rotate(-180deg) scale(0.6); }
+      to { transform: rotate(0deg) scale(1); }
     }
 
-    footer { text-align: center; padding: 24px 20px 36px; color: var(--muted); font-size: 0.84rem; }
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 24px 20px 38px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal-item { opacity: 1 !important; transform: none !important; }
+    }
   </style>
 </head>
 <body>
+  <div class="bg-stage" aria-hidden="true">
+    <div class="aurora-orb a1"></div>
+    <div class="aurora-orb a2"></div>
+    <div class="aurora-orb a3"></div>
+    <canvas id="bg3dCanvas"></canvas>
+  </div>
+
   <div class="container">
-    <header class="topbar">
+    <header class="topbar" id="topbar">
       <a class="brand" href="#">
         <span class="brand-icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+            <g class="brand-arrow">
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </g>
           </svg>
         </span>
         <span>
@@ -237,16 +714,21 @@
       </nav>
     </header>
 
-    <section class="hero-card">
+    <section class="hero-card" id="heroCard">
+      <div class="hero-spotlight" aria-hidden="true"></div>
+      <div class="hero-kicker">
+        <span class="kicker-spark" aria-hidden="true">&#10022;</span>
+        <span>Fast Private Device Downloads</span>
+      </div>
       <h1>LMF Downloader</h1>
       <p class="subtitle">
         Search, stream previews, and save HD videos or MP3 audio directly onto your Android phone or Windows PC—with built-in trending discovery, batch playlists, background downloads, and instant Android link sharing.
       </p>
 
       <div class="download-grid">
-        <a class="dl-card is-primary" id="apkDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-android.apk">
+        <a class="dl-card is-primary tilt-card" id="apkDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-android.apk">
           <span class="dl-platform">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg class="icon-android" width="23" height="23" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.08 10.75 2.5 13.09 2.2 15.8h19.6c-.3-2.71-1.88-5.05-4.2-6.32zM8.5 13.3a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
             </svg>
             Download for Android (.apk)
@@ -254,19 +736,22 @@
           <span class="dl-meta" id="apkMeta">v1.0.2 &bull; 111.34 MB &bull; Android 7.0+</span>
         </a>
 
-        <a class="dl-card" id="msiDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-win64.msi">
+        <a class="dl-card tilt-card" id="msiDownloadCard" href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-win64.msi">
           <span class="dl-platform">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M3 4.6L10.8 3.5V11H3V4.6zm8.8-1.2L21 2v9h-9.2V3.4zM3 12h7.8v7.6L3 18.5V12zm8.8 0H21v9l-9.2-1.3V12z"/>
+            <svg class="icon-windows" width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path class="win-p1" d="M3 4.6L10.8 3.5V11H3V4.6z"/>
+              <path class="win-p2" d="M11.8 3.4L21 2v9h-9.2V3.4z"/>
+              <path class="win-p3" d="M3 12h7.8v7.6L3 18.5V12z"/>
+              <path class="win-p4" d="M11.8 12H21v9l-9.2-1.3V12z"/>
             </svg>
             Download for Windows (.msi)
           </span>
           <span class="dl-meta" id="msiMeta">v1.0.2 &bull; 535.14 MB &bull; Windows 10/11 64-bit</span>
         </a>
 
-        <button class="dl-card" id="chromeExtBtn" type="button">
+        <button class="dl-card tilt-card" id="chromeExtBtn" type="button">
           <span class="dl-platform">
-            <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="icon-chrome" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="10" fill="#4285F4"/>
               <path d="M12 2a10 10 0 0 1 8.66 5H12a5 5 0 0 0-4.33 2.5L3.34 7A10 10 0 0 1 12 2z" fill="#EA4335"/>
               <path d="M3.34 7l4.33 7.5A5 5 0 0 0 12 17v5a10 10 0 0 1-8.66-15z" fill="#34A853"/>
@@ -288,32 +773,50 @@
     </section>
 
     <section class="section" id="about">
-      <div class="section-head">
+      <div class="section-head reveal-item">
         <h2>What LMF Downloader Is All About</h2>
         <p>Built by ShemaLabs to give you a clean, private, all-in-one media downloader right on your device—no cloud upload queues, no accounts, and no ads.</p>
       </div>
       <div class="feature-grid">
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:0">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
           <h3>Live Trending &amp; Fast Search</h3>
           <p>Browse rotating trending videos (Music, Gaming, Tech, News) on Home or search videos and playlists across YouTube, Facebook, TikTok, Instagram, and 1,000+ platforms.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:1">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
           <h3>Inline Preview &amp; Fullscreen</h3>
           <p>Tap any thumbnail on mobile to preview clips straight inside the card without pop-ups, and expand widescreen videos cleanly into landscape fullscreen.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:2">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </div>
           <h3>Share From Any Mobile App</h3>
           <p>Tap Share inside YouTube, Facebook, TikTok, or Instagram and choose LMF Downloader—the link opens and inspects automatically ready to save.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:3">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
           <h3>HD Video &amp; Crisp MP3 Audio</h3>
           <p>Download highest available or preferred video resolution cleanly merged into MP4, or extract high-bitrate MP3 audio files offline.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:4">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
           <h3>Background Queue &amp; Recovery</h3>
           <p>Dismiss the Live Downloads dock while files keep downloading cleanly in the background, complete with Android alerts and failed transfer recovery.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:5">
+          <div class="feat-badge" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
           <h3>Light, Dark &amp; Offline Ready</h3>
           <p>Switch seamlessly between Light and Dark themes, monitor your internet status at a glance from the header dot, and play saved files anytime.</p>
         </article>
@@ -321,27 +824,27 @@
     </section>
 
     <section class="section" id="how-it-works">
-      <div class="section-head">
+      <div class="section-head reveal-item">
         <h2>How LMF Downloader Works</h2>
         <p>Everything runs locally inside the app on your own Android phone or Windows PC—nothing gets routed through third-party websites.</p>
       </div>
       <div class="steps-grid">
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:0">
           <div class="step-num">1</div>
           <h3>Find or Share</h3>
           <p>Pick a trending clip, search keywords, paste a playlist/video link, or share straight from another Android app.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:1">
           <div class="step-num">2</div>
           <h3>Pick Your Format</h3>
           <p>Tap Download to choose Video or MP3 audio quality, or tap + Queue to line up multiple downloads at once.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:2">
           <div class="step-num">3</div>
           <h3>Local Processing</h3>
           <p>Our built-in media engine fetches high-speed audio/video streams and combines or converts them privately right on your device.</p>
         </article>
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:3">
           <div class="step-num">4</div>
           <h3>Play &amp; Organize</h3>
           <p>Saved files land in your Downloaded Files library (and your phone Downloads folder on Android) ready to watch offline.</p>
@@ -350,19 +853,19 @@
     </section>
 
     <section class="section" id="screenshots">
-      <div class="section-head">
+      <div class="section-head reveal-item">
         <h2>Screenshots Across Every Page</h2>
         <p>Click any screenshot to enlarge and inspect every view of LMF Downloader on Mobile and Windows PC.</p>
       </div>
 
-      <div class="filter-pills" role="tablist" aria-label="Filter screenshots">
+      <div class="filter-pills reveal-item" role="tablist" aria-label="Filter screenshots">
         <button class="pill-btn active" type="button" data-filter="all">All Screens (9)</button>
         <button class="pill-btn" type="button" data-filter="mobile">Android Mobile (8)</button>
         <button class="pill-btn" type="button" data-filter="desktop">Windows Desktop (1)</button>
       </div>
 
       <div class="gallery-grid" id="galleryGrid">
-        <article class="shot-card" data-platform="mobile" data-title="Home &amp; Trending Feed (Android)">
+        <article class="shot-card reveal-item" style="--stagger:0" data-platform="mobile" data-title="Home &amp; Trending Feed (Android)">
           <div class="shot-media"><img src="screenshots/android-home.png" alt="LMF Downloader Home screen with Trending Videos and top Search bar" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Home Page</span>
@@ -371,7 +874,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Inline Card Video Preview (Android)">
+        <article class="shot-card reveal-item" style="--stagger:1" data-platform="mobile" data-title="Inline Card Video Preview (Android)">
           <div class="shot-media"><img src="screenshots/android-player.png" alt="LMF Downloader inline video playback directly inside a card with Fullscreen toggle" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Inline Player</span>
@@ -380,7 +883,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Multi-Platform Search Results (Android)">
+        <article class="shot-card reveal-item" style="--stagger:2" data-platform="mobile" data-title="Multi-Platform Search Results (Android)">
           <div class="shot-media"><img src="screenshots/android-search.png" alt="LMF Downloader search results with platform filter pills and compact action buttons" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Search Page</span>
@@ -389,7 +892,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Transfer Queue &amp; URL Intake (Android)">
+        <article class="shot-card reveal-item" style="--stagger:3" data-platform="mobile" data-title="Transfer Queue &amp; URL Intake (Android)">
           <div class="shot-media"><img src="screenshots/android-queue.png" alt="LMF Downloader Queue page with URL intake box, playlist inspector, and output settings" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Queue Page</span>
@@ -398,7 +901,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="History &amp; Transfer Recovery (Android)">
+        <article class="shot-card reveal-item" style="--stagger:4" data-platform="mobile" data-title="History &amp; Transfer Recovery (Android)">
           <div class="shot-media"><img src="screenshots/android-history.png" alt="LMF Downloader History page with completed transfers and interrupted download recovery" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">History Page</span>
@@ -407,7 +910,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Downloaded Files Library (Android)">
+        <article class="shot-card reveal-item" style="--stagger:5" data-platform="mobile" data-title="Downloaded Files Library (Android)">
           <div class="shot-media"><img src="screenshots/android-files.png" alt="LMF Downloader Downloaded Files library showing Play, Save As, and folder access" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Files Page</span>
@@ -416,7 +919,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Settings &amp; Preferences (Android)">
+        <article class="shot-card reveal-item" style="--stagger:6" data-platform="mobile" data-title="Settings &amp; Preferences (Android)">
           <div class="shot-media"><img src="screenshots/android-settings.png" alt="LMF Downloader Settings modal showing default quality, notifications, and auto-export toggles" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Settings Modal</span>
@@ -425,7 +928,7 @@
           </div>
         </article>
 
-        <article class="shot-card" data-platform="mobile" data-title="Dark Mode Experience (Android)">
+        <article class="shot-card reveal-item" style="--stagger:7" data-platform="mobile" data-title="Dark Mode Experience (Android)">
           <div class="shot-media"><img src="screenshots/android-dark.png" alt="LMF Downloader Dark theme search screen" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Dark Theme</span>
@@ -434,7 +937,7 @@
           </div>
         </article>
 
-        <article class="shot-card is-wide" data-platform="desktop" data-title="LMF Downloader Windows Desktop App">
+        <article class="shot-card is-wide reveal-item" style="--stagger:8" data-platform="desktop" data-title="LMF Downloader Windows Desktop App">
           <div class="shot-media"><img src="screenshots/desktop-home.png" alt="LMF Downloader desktop application window for Windows 10 and 11" loading="lazy" /></div>
           <div class="shot-body">
             <span class="shot-tag">Windows PC</span>
@@ -446,13 +949,13 @@
     </section>
 
     <section class="section" id="guides">
-      <div class="section-head">
+      <div class="section-head reveal-item">
         <h2>Step-by-Step Installation &amp; User Guides</h2>
         <p>Follow these quick steps to install and start saving videos or music in under two minutes.</p>
       </div>
 
       <div class="guide-grid">
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:0">
           <h3>How to Install on Android</h3>
           <ol class="guide-list">
             <li>Tap <strong>Download for Android (.apk)</strong> at the top of this page.</li>
@@ -462,7 +965,7 @@
           </ol>
         </article>
 
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:1">
           <h3>How to Install on Windows PC</h3>
           <ol class="guide-list">
             <li>Click <strong>Download for Windows (.msi)</strong> at the top of this page.</li>
@@ -472,7 +975,7 @@
           </ol>
         </article>
 
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:2">
           <h3>How to Use: Search, Preview &amp; Download</h3>
           <ol class="guide-list">
             <li>Open <strong>Home</strong> to browse trending clips across categories, or type keywords / paste any supported video link into the top search bar.</li>
@@ -482,7 +985,7 @@
           </ol>
         </article>
 
-        <article class="card">
+        <article class="card reveal-item" style="--stagger:3">
           <h3>How to Use: Android Share, Playlists &amp; Recovery</h3>
           <ol class="guide-list">
             <li><strong>Share from other apps:</strong> Inside YouTube, TikTok, Instagram, or Facebook, tap <strong>Share &rarr; LMF Downloader</strong> to inspect and download immediately.</li>
@@ -493,7 +996,7 @@
         </article>
       </div>
 
-      <details class="checksum-box">
+      <details class="checksum-box reveal-item">
         <summary>Verify Installer Checksums (SHA-256)</summary>
         <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-android.apk:</strong> 84b4a342027899f5c4ed9e3f116825499cebc181839704b3e67f3d9c96e80627</div>
         <div class="checksum-item"><strong>LiopolMediaFetch-1.0.2-win64.msi:</strong> 0a818c613f042272ea92092936dd31237855076db9e69423afd70f2fe51d9a72</div>
@@ -511,7 +1014,7 @@
 
   <div class="popup-overlay hidden" id="comingSoonModal" role="dialog" aria-modal="true" aria-labelledby="comingSoonTitle">
     <div class="popup-box">
-      <svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true">
+      <svg width="48" height="48" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="10" fill="#4285F4"/>
         <path d="M12 2a10 10 0 0 1 8.66 5H12a5 5 0 0 0-4.33 2.5L3.34 7A10 10 0 0 1 12 2z" fill="#EA4335"/>
         <path d="M3.34 7l4.33 7.5A5 5 0 0 0 12 17v5a10 10 0 0 1-8.66-15z" fill="#34A853"/>
@@ -531,7 +1034,11 @@
 
   <script>
     (function () {
-      // Light mode by default (user preference), with manual toggle
+      const prefersReduced =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // 1. Light mode by default + elastic spring toggle
       const themeBtn = document.getElementById("siteThemeToggle");
       function setTheme(t) {
         if (t === "dark") {
@@ -545,12 +1052,301 @@
       setTheme("light");
       if (themeBtn) {
         themeBtn.addEventListener("click", function () {
+          themeBtn.classList.add("is-spinning");
+          setTimeout(function () { themeBtn.classList.remove("is-spinning"); }, 420);
           const isDark = document.documentElement.getAttribute("data-theme") === "dark";
           setTheme(isDark ? "light" : "dark");
         });
       }
 
-      // Chrome Extension "Coming Soon" modal on click
+      // 2. Interactive 3D Wave Terrain + Floating Polyhedra + Depth Bokeh Engine
+      (function init3DBackground() {
+        const canvas = document.getElementById("bg3dCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let width = 0, height = 0, time = 0;
+        let ptrX = 0, ptrY = 0, targetPtrX = 0, targetPtrY = 0;
+        let boost = 0, targetBoost = 0, scrollShift = 0;
+
+        const COLS = 30, ROWS = 18;
+        const SX = 94, SZ = 96;
+        const particles = [];
+        for (let i = 0; i < 46; i++) {
+          particles.push({
+            x: (Math.random() - 0.5) * 2600,
+            y: (Math.random() - 0.5) * 1100 - 110,
+            z: 180 + Math.random() * 1950,
+            size: 1.5 + Math.random() * 3.2,
+            speed: 0.7 + Math.random() * 1.4,
+            phase: Math.random() * Math.PI * 2,
+            kind: i % 3 === 0 ? "prism" : (i % 5 === 0 ? "ring" : "orb")
+          });
+        }
+
+        function palette() {
+          const dark = document.documentElement.getAttribute("data-theme") === "dark";
+          if (dark) {
+            return {
+              line: "92, 124, 250",
+              accent: "32, 201, 151",
+              node: "165, 180, 252",
+              lineA: 0.16,
+              ribbonA: 0.13,
+              dotA: 0.34
+            };
+          }
+          return {
+            line: "59, 91, 219",
+            accent: "18, 184, 134",
+            node: "76, 110, 245",
+            lineA: 0.125,
+            ribbonA: 0.095,
+            dotA: 0.28
+          };
+        }
+
+        function resize() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          width = window.innerWidth;
+          height = window.innerHeight;
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function project(x, y, z, camX, camY, rotY, rotX) {
+          const px = x - camX;
+          const py = y - camY;
+          const pz = z;
+          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+          const x1 = px * cosY - pz * sinY;
+          const z1 = px * sinY + pz * cosY;
+          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+          const y2 = py * cosX - z1 * sinX;
+          const z2 = py * sinX + z1 * cosX;
+          if (z2 < 90) return null;
+          const fov = Math.min(width, height) * 0.92 + 120;
+          const s = fov / z2;
+          return {
+            x: width * 0.5 + x1 * s,
+            y: height * 0.55 + y2 * s,
+            scale: s,
+            z: z2
+          };
+        }
+
+        function frame() {
+          ctx.clearRect(0, 0, width, height);
+          const pal = palette();
+          ptrX += (targetPtrX - ptrX) * 0.05;
+          ptrY += (targetPtrY - ptrY) * 0.05;
+          boost += (targetBoost - boost) * 0.05;
+          scrollShift += (((window.scrollY || 0) * 0.08) - scrollShift) * 0.06;
+
+          time += prefersReduced ? 0 : 0.013 + boost * 0.018;
+
+          const camX = ptrX * 95;
+          const camY = -195 + ptrY * 45 + Math.min(scrollShift, 90);
+          const rotY = ptrX * 0.09;
+          const rotX = 0.27 + ptrY * 0.05;
+
+          const grid = new Array(ROWS);
+          const startX = -((COLS - 1) * SX) / 2;
+          for (let r = 0; r < ROWS; r++) {
+            grid[r] = new Array(COLS);
+            const z = 200 + r * SZ;
+            for (let c = 0; c < COLS; c++) {
+              const x = startX + c * SX;
+              const w1 = Math.sin(c * 0.36 + time * 1.5) * 56;
+              const w2 = Math.cos(r * 0.44 - time * 1.15) * 44;
+              const w3 = Math.sin((c + r) * 0.24 + time * 0.9) * 28;
+              grid[r][c] = project(x, 165 + w1 + w2 + w3, z, camX, camY, rotY, rotX);
+            }
+          }
+
+          ctx.lineWidth = 1;
+          for (let r = 0; r < ROWS; r++) {
+            const fade = 1 - r / ROWS;
+            ctx.beginPath();
+            let started = false;
+            for (let c = 0; c < COLS; c++) {
+              const pt = grid[r][c];
+              if (!pt) { started = false; continue; }
+              if (!started) { ctx.moveTo(pt.x, pt.y); started = true; }
+              else ctx.lineTo(pt.x, pt.y);
+            }
+            ctx.strokeStyle = "rgba(" + pal.line + "," + (pal.lineA * (0.28 + fade * 0.95)).toFixed(3) + ")";
+            ctx.stroke();
+          }
+
+          for (let c = 0; c < COLS; c += 2) {
+            ctx.beginPath();
+            let started = false;
+            for (let r = 0; r < ROWS; r++) {
+              const pt = grid[r][c];
+              if (!pt) { started = false; continue; }
+              if (!started) { ctx.moveTo(pt.x, pt.y); started = true; }
+              else ctx.lineTo(pt.x, pt.y);
+            }
+            ctx.strokeStyle = "rgba(" + pal.accent + "," + pal.ribbonA.toFixed(3) + ")";
+            ctx.stroke();
+          }
+
+          for (let r = 0; r < ROWS - 3; r += 2) {
+            const fade = 1 - r / ROWS;
+            for (let c = 0; c < COLS; c += 2) {
+              const pt = grid[r][c];
+              if (!pt) continue;
+              const rad = Math.max(0.9, 2.3 * pt.scale);
+              ctx.fillStyle = "rgba(" + pal.node + "," + (pal.dotA * fade).toFixed(3) + ")";
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            if (!prefersReduced) {
+              p.z -= p.speed * (1.25 + boost * 2.2);
+              p.y += Math.sin(time * 1.5 + p.phase) * 0.42;
+              if (p.z < 120) {
+                p.z = 2100;
+                p.x = (Math.random() - 0.5) * 2600;
+                p.y = (Math.random() - 0.5) * 1100 - 110;
+              }
+            }
+            const proj = project(p.x, p.y, p.z, camX, camY, rotY, rotX);
+            if (!proj || proj.x < -50 || proj.x > width + 50 || proj.y < -50 || proj.y > height + 50) continue;
+            const depthNorm = Math.max(0, Math.min(1, 1 - proj.z / 2150));
+            const sz = Math.max(1.2, p.size * proj.scale * 2.3);
+            const alpha = 0.16 + depthNorm * 0.48;
+
+            if (p.kind === "prism") {
+              ctx.save();
+              ctx.translate(proj.x, proj.y);
+              ctx.rotate(time * 0.55 + p.phase);
+              ctx.strokeStyle = "rgba(" + pal.line + "," + alpha.toFixed(3) + ")";
+              ctx.lineWidth = 1.25;
+              ctx.strokeRect(-sz, -sz, sz * 2, sz * 2);
+              ctx.beginPath();
+              ctx.moveTo(0, -sz * 1.35);
+              ctx.lineTo(sz * 1.35, 0);
+              ctx.lineTo(0, sz * 1.35);
+              ctx.lineTo(-sz * 1.35, 0);
+              ctx.closePath();
+              ctx.strokeStyle = "rgba(" + pal.accent + "," + (alpha * 0.72).toFixed(3) + ")";
+              ctx.stroke();
+              ctx.restore();
+            } else if (p.kind === "ring") {
+              ctx.strokeStyle = "rgba(" + pal.accent + "," + (alpha * 0.85).toFixed(3) + ")";
+              ctx.lineWidth = 1.3;
+              ctx.beginPath();
+              ctx.arc(proj.x, proj.y, sz * 1.35, 0, Math.PI * 2);
+              ctx.stroke();
+            } else {
+              ctx.fillStyle = "rgba(" + pal.node + "," + alpha.toFixed(3) + ")";
+              ctx.beginPath();
+              ctx.arc(proj.x, proj.y, sz, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          if (!prefersReduced) requestAnimationFrame(frame);
+        }
+
+        window.addEventListener("resize", resize, { passive: true });
+        window.addEventListener("pointermove", function (e) {
+          if (!width || !height) return;
+          targetPtrX = (e.clientX / width - 0.5) * 2;
+          targetPtrY = (e.clientY / height - 0.5) * 2;
+        }, { passive: true });
+
+        document.querySelectorAll(".dl-card").forEach(function (card) {
+          card.addEventListener("pointerenter", function () { targetBoost = 1; });
+          card.addEventListener("pointerleave", function () { targetBoost = 0; });
+        });
+
+        resize();
+        frame();
+      })();
+
+      // 3. Topbar scroll state + Hero spotlight mouse follow
+      const topbar = document.getElementById("topbar");
+      window.addEventListener("scroll", function () {
+        if (!topbar) return;
+        if (window.scrollY > 18) topbar.classList.add("is-scrolled");
+        else topbar.classList.remove("is-scrolled");
+      }, { passive: true });
+
+      const heroCard = document.getElementById("heroCard");
+      if (heroCard) {
+        heroCard.addEventListener("pointermove", function (e) {
+          const rect = heroCard.getBoundingClientRect();
+          heroCard.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+          heroCard.style.setProperty("--my", (e.clientY - rect.top) + "px");
+        }, { passive: true });
+      }
+
+      // 4. 3D Magnetic Tilt + Playful Ripple on Hero Cards
+      document.querySelectorAll(".tilt-card").forEach(function (card) {
+        if (!prefersReduced) {
+          card.addEventListener("pointermove", function (e) {
+            if (e.pointerType === "touch") return;
+            const r = card.getBoundingClientRect();
+            const nx = (e.clientX - r.left) / r.width - 0.5;
+            const ny = (e.clientY - r.top) / r.height - 0.5;
+            const rotY = (nx * 14).toFixed(2);
+            const rotX = (-ny * 14).toFixed(2);
+            card.style.transform =
+              "perspective(900px) rotateX(" + rotX + "deg) rotateY(" + rotY + "deg) translateY(-4px) scale(1.02)";
+          });
+          card.addEventListener("pointerleave", function () {
+            card.style.transform = "";
+          });
+        }
+        card.addEventListener("click", function (e) {
+          const r = card.getBoundingClientRect();
+          const ripple = document.createElement("span");
+          ripple.className = "click-ripple";
+          const size = Math.max(r.width, r.height) * 0.45;
+          ripple.style.width = size + "px";
+          ripple.style.height = size + "px";
+          ripple.style.left = ((e.clientX ? e.clientX - r.left : r.width / 2) - size / 2) + "px";
+          ripple.style.top = ((e.clientY ? e.clientY - r.top : r.height / 2) - size / 2) + "px";
+          card.appendChild(ripple);
+          setTimeout(function () { if (ripple.parentNode) ripple.parentNode.removeChild(ripple); }, 620);
+        });
+      });
+
+      // 5. Scroll-triggered reveals with instant viewport visibility safety
+      const revealEls = document.querySelectorAll(".reveal-item");
+      function revealVisibleNow() {
+        const vh = window.innerHeight || 900;
+        revealEls.forEach(function (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < vh * 1.05) el.classList.add("is-visible");
+        });
+      }
+      if ("IntersectionObserver" in window && !prefersReduced) {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: "0px 0px 40px 0px" });
+        revealEls.forEach(function (el) { io.observe(el); });
+        window.addEventListener("scroll", revealVisibleNow, { passive: true });
+        requestAnimationFrame(revealVisibleNow);
+      } else {
+        revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+      }
+
+      // 6. Chrome Extension "Coming Soon" modal on click
       const extBtn = document.getElementById("chromeExtBtn");
       const soonModal = document.getElementById("comingSoonModal");
       const soonClose = document.getElementById("comingSoonCloseBtn");
@@ -561,6 +1357,7 @@
       if (soonClose) soonClose.addEventListener("click", closeSoon);
       if (soonModal) soonModal.addEventListener("click", function (e) { if (e.target === soonModal) closeSoon(); });
 
+      // 7. Highlight Windows card by default on Windows desktops
       const ua = (navigator.userAgent || "").toLowerCase();
       const apkCard = document.getElementById("apkDownloadCard");
       const msiCard = document.getElementById("msiDownloadCard");
@@ -569,6 +1366,7 @@
         msiCard.classList.add("is-primary");
       }
 
+      // 8. Filter pills + Screenshot Lightbox
       const pills = document.querySelectorAll(".pill-btn");
       const cards = document.querySelectorAll(".shot-card");
       pills.forEach(function (btn) {
@@ -579,6 +1377,7 @@
           cards.forEach(function (c) {
             if (f === "all" || c.getAttribute("data-platform") === f) {
               c.classList.remove("hidden");
+              c.classList.add("is-visible");
             } else {
               c.classList.add("hidden");
             }
@@ -600,10 +1399,29 @@
           modal.classList.remove("hidden");
         });
       });
-      function closeLb() { modal.classList.add("hidden"); }
+      function closeLb() { if (modal) modal.classList.add("hidden"); }
       if (lbClose) lbClose.addEventListener("click", closeLb);
       if (modal) modal.addEventListener("click", function (e) { if (e.target === modal) closeLb(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeLb(); closeSoon(); } });
+
+      // 9. Animated Count-Up for Live GitHub Release Download Stats
+      function animateCounter(el, targetTotal, totalApk, totalMsi) {
+        if (!el) return;
+        if (prefersReduced || targetTotal <= 0) {
+          el.innerHTML = "<strong>" + targetTotal + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
+          return;
+        }
+        const duration = 700;
+        const start = performance.now();
+        function tick(now) {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const cur = Math.round(targetTotal * eased);
+          el.innerHTML = "<strong>" + cur + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
 
       fetch("https://api.github.com/repos/IsaacMatthewMethods/liopol-media-fetch/releases")
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -637,10 +1455,7 @@
             }
           });
 
-          const statsEl = document.getElementById("liveDownloadStats");
-          if (statsEl) {
-            statsEl.innerHTML = "<strong>" + (totalApk + totalMsi) + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
-          }
+          animateCounter(document.getElementById("liveDownloadStats"), totalApk + totalMsi, totalApk, totalMsi);
         })
         .catch(function () {});
     })();
