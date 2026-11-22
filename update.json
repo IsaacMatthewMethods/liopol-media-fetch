@@ -1,0 +1,18 @@
+{
+  "latest_version": "1.0.3",
+  "min_required_version": "1.0.0",
+  "release_url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/tag/v1.0.3",
+  "notes": "LMF Downloader v1.0.3 introduces built-in in-app updates with live download progress, SHA-256 verification, optional banner & mandatory update support, and in-place upgrades.",
+  "published_at": "2026-11-22T23:42:10Z",
+  "android": {
+    "version_code": 103,
+    "url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.3/LiopolMediaFetch-1.0.3-android.apk",
+    "sha256": "8215f3c7dfec4b47d465dfc7212209790634b5f1d34dfcb6c952f370468adba4",
+    "size_bytes": 116767678
+  },
+  "windows": {
+    "url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.3/LiopolMediaFetch-1.0.3-win64.msi",
+    "sha256": "06d276e9f7262540f93efaa5412ec5d9339574ddc1ba5000d0f9719cff09b358",
+    "size_bytes": 561176576
+  }
+}
