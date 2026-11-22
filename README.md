@@ -1,13 +1,15 @@
-# LMF Downloader — Official Releases
+# LMF Downloader (by ShemaLabs)
 
-Download **LMF Downloader** (`by ShemaLabs`) for **Android** and **Windows PC**.
+Official release distribution for **LMF Downloader** on Android and Windows.
 
-- **Official Download Website**: [https://isaacmatthewmethods.github.io/liopol-media-fetch/](https://isaacmatthewmethods.github.io/liopol-media-fetch/)
-- **Releases Page**: [https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases)
+## Download Latest Release (v1.0.3)
+- **Android APK (111.36 MB):** [Download LiopolMediaFetch-1.0.3-android.apk](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.3/LiopolMediaFetch-1.0.3-android.apk)
+- **Windows MSI (535.18 MB):** [Download LiopolMediaFetch-1.0.3-win64.msi](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.3/LiopolMediaFetch-1.0.3-win64.msi)
+- **Landing Page:** http://apps.shemalabs.cloud/
 
-## Latest Release: `v1.0.2`
+## In-App Updates
+Starting with `v1.0.3`, LMF Downloader automatically checks [`update.json`](update.json) on startup (and via **Settings -> About Us -> Check for Updates**), downloads upgrades with a live progress bar, verifies SHA-256 checksums, and installs cleanly in place while preserving your downloads and preferences.
 
-| Platform | Installer | Size | SHA-256 |
-| :--- | :--- | :--- | :--- |
-| **Android (7.0+)** | [LiopolMediaFetch-1.0.2-android.apk](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-android.apk) | 111.34 MB | `84b4a342027899f5c4ed9e3f116825499cebc181839704b3e67f3d9c96e80627` |
-| **Windows 10/11 (64-bit)** | [LiopolMediaFetch-1.0.2-win64.msi](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.2/LiopolMediaFetch-1.0.2-win64.msi) | 535.14 MB | `0a818c613f042272ea92092936dd31237855076db9e69423afd70f2fe51d9a72` |
+### SHA-256 Checksums
+- `LiopolMediaFetch-1.0.3-android.apk`: `8215f3c7dfec4b47d465dfc7212209790634b5f1d34dfcb6c952f370468adba4`
+- `LiopolMediaFetch-1.0.3-win64.msi`: `06d276e9f7262540f93efaa5412ec5d9339574ddc1ba5000d0f9719cff09b358`
