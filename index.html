@@ -50,46 +50,58 @@
       transition: background-color 0.4s ease, color 0.3s ease;
     }
 
-    /* Cinematic Multi-Layer 3D Animated Backdrop */
+    /* Cinematic Multi-Layer 3D Orbital Glass & Ribbon Backdrop */
     .bg-stage {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(99, 102, 241, 0.13), transparent 45%),
+        radial-gradient(circle at 86% 22%, rgba(20, 184, 166, 0.12), transparent 44%),
+        radial-gradient(circle at 72% 84%, rgba(168, 85, 247, 0.10), transparent 48%),
+        var(--bg);
+    }
+    :root[data-theme="dark"] .bg-stage {
+      background:
+        radial-gradient(circle at 14% 16%, rgba(79, 70, 229, 0.22), transparent 48%),
+        radial-gradient(circle at 85% 24%, rgba(13, 148, 136, 0.16), transparent 46%),
+        radial-gradient(circle at 65% 88%, rgba(139, 92, 246, 0.18), transparent 50%),
+        var(--bg);
     }
     .aurora-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(75px);
-      opacity: 0.45;
+      filter: blur(82px);
+      opacity: 0.62;
       will-change: transform;
-      animation: auroraFloat 18s ease-in-out infinite alternate;
+      animation: auroraOrbit 20s ease-in-out infinite alternate;
     }
     .aurora-orb.a1 {
-      width: 520px; height: 520px;
-      top: -160px; left: -100px;
-      background: radial-gradient(circle, rgba(76, 110, 245, 0.34), transparent 70%);
+      width: 560px; height: 420px;
+      top: -140px; left: -120px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.36), rgba(56, 189, 248, 0.14) 60%, transparent 75%);
     }
     .aurora-orb.a2 {
-      width: 480px; height: 480px;
-      top: 12%; right: -120px;
-      background: radial-gradient(circle, rgba(18, 184, 134, 0.24), transparent 70%);
-      animation-delay: -6s;
-      animation-duration: 22s;
+      width: 520px; height: 460px;
+      top: 18%; right: -150px;
+      background: radial-gradient(circle, rgba(20, 184, 166, 0.28), rgba(59, 130, 246, 0.12) 60%, transparent 75%);
+      animation-delay: -7s;
+      animation-duration: 24s;
     }
     .aurora-orb.a3 {
-      width: 560px; height: 560px;
-      bottom: -220px; left: 28%;
-      background: radial-gradient(circle, rgba(116, 143, 252, 0.24), transparent 70%);
-      animation-delay: -11s;
-      animation-duration: 26s;
+      width: 600px; height: 420px;
+      bottom: -180px; left: 22%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.24), rgba(236, 72, 153, 0.10) 60%, transparent 75%);
+      animation-delay: -13s;
+      animation-duration: 28s;
     }
     :root[data-theme="dark"] .aurora-orb.a1 {
-      background: radial-gradient(circle, rgba(76, 110, 245, 0.28), transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.32), rgba(56, 189, 248, 0.12) 65%, transparent 76%);
     }
     :root[data-theme="dark"] .aurora-orb.a2 {
-      background: radial-gradient(circle, rgba(32, 201, 151, 0.20), transparent 70%);
+      background: radial-gradient(circle, rgba(20, 184, 166, 0.24), rgba(59, 130, 246, 0.10) 65%, transparent 76%);
     }
     #bg3dCanvas {
       position: absolute;
@@ -98,10 +110,10 @@
       height: 100%;
       display: block;
     }
-    @keyframes auroraFloat {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(42px, 28px, 0) scale(1.08); }
-      100% { transform: translate3d(-28px, 48px, 0) scale(0.95); }
+    @keyframes auroraOrbit {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate3d(48px, -24px, 0) rotate(8deg) scale(1.1); }
+      100% { transform: translate3d(-32px, 42px, 0) rotate(-6deg) scale(0.94); }
     }
 
     /* Foreground Layout Container */
@@ -441,8 +453,15 @@
     }
     .stats-strip strong { color: var(--text); }
 
+    @media (max-width: 680px) {
+      .topbar { position: relative; top: 0; }
+    }
+    @media (max-width: 560px) {
+      .stats-strip { border-radius: 16px; gap: 4px 10px; padding: 8px 14px; }
+      .stats-sep { display: none; }
+    }
     /* Sections & Scroll-Triggered Reveal Macro Choreography */
-    .section { margin-top: 52px; }
+    .section { margin-top: 52px; scroll-margin-top: 92px; }
     .section-head { margin-bottom: 20px; }
     .section-head h2 { margin: 0 0 6px; font-size: 1.5rem; letter-spacing: -0.02em; }
     .section-head p { margin: 0; color: var(--muted); }
@@ -767,7 +786,7 @@
 
       <div class="stats-strip">
         <span id="liveDownloadStats">Downloads tracked live via official releases</span>
-        <span>&bull;</span>
+        <span class="stats-sep">&bull;</span>
         <a href="https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-weight: 600;">View Release Notes &amp; All Versions</a>
       </div>
     </section>
@@ -1007,7 +1026,7 @@
   <div class="lightbox hidden" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
     <button class="lightbox-close" id="lightboxCloseBtn" type="button" aria-label="Close">&times;</button>
     <div class="lightbox-inner">
-      <img id="lightboxImg" src="" alt="" />
+      <img id="lightboxImg" alt="" />
       <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
   </div>
@@ -1059,7 +1078,7 @@
         });
       }
 
-      // 2. Interactive 3D Wave Terrain + Floating Polyhedra + Depth Bokeh Engine
+      // 2. Interactive 3D Floating Crystal Polyhedra, Gyro Torus Rings & Constellation Engine
       (function init3DBackground() {
         const canvas = document.getElementById("bg3dCanvas");
         if (!canvas) return;
@@ -1068,42 +1087,77 @@
 
         let width = 0, height = 0, time = 0;
         let ptrX = 0, ptrY = 0, targetPtrX = 0, targetPtrY = 0;
-        let boost = 0, targetBoost = 0, scrollShift = 0;
+        let mouseScreenX = -9999, mouseScreenY = -9999;
+        let boost = 0, targetBoost = 0, scrollRatio = 0;
 
-        const COLS = 30, ROWS = 18;
-        const SX = 94, SZ = 96;
-        const particles = [];
-        for (let i = 0; i < 46; i++) {
-          particles.push({
-            x: (Math.random() - 0.5) * 2600,
-            y: (Math.random() - 0.5) * 1100 - 110,
-            z: 180 + Math.random() * 1950,
-            size: 1.5 + Math.random() * 3.2,
-            speed: 0.7 + Math.random() * 1.4,
+        // Build unit Cube & Octahedron local geometry
+        const OCT_VERTS = [
+          [0, 1.35, 0], [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1], [0, -1.35, 0]
+        ];
+        const OCT_FACES = [
+          [0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1],
+          [5, 2, 1], [5, 3, 2], [5, 4, 3], [5, 1, 4]
+        ];
+        const CUBE_VERTS = [
+          [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+          [-1, -1, 1],  [1, -1, 1],  [1, 1, 1],  [-1, 1, 1]
+        ];
+        const CUBE_FACES = [
+          [0, 1, 2, 3], [5, 4, 7, 6], [4, 0, 3, 7],
+          [1, 5, 6, 2], [3, 2, 6, 7], [4, 5, 1, 0]
+        ];
+
+        // Distribute crisp 3D translucent crystals & orbital gyro rings around edges/depth
+        const polyhedra = [
+          { type: "oct",  bx: -0.44, by: -0.32, z: 540,  size: 54, rx: 0.2, ry: 0.4, rz: 0.1, sx: 0.42, sy: 0.68, sz: 0.25, hue: "primary", phase: 0.0 },
+          { type: "cube", bx:  0.45, by: -0.28, z: 620,  size: 46, rx: 0.6, ry: 0.2, rz: 0.5, sx: 0.36, sy: -0.52, sz: 0.30, hue: "teal", phase: 1.4 },
+          { type: "ring", bx: -0.46, by:  0.22, z: 580,  size: 62, rx: 1.0, ry: 0.3, rz: 0.2, sx: 0.48, sy: 0.35, sz: 0.22, hue: "violet", phase: 2.3 },
+          { type: "oct",  bx:  0.46, by:  0.26, z: 520,  size: 48, rx: 0.3, ry: 0.9, rz: 0.4, sx: -0.38, sy: 0.58, sz: 0.28, hue: "teal", phase: 3.1 },
+          { type: "ring", bx:  0.18, by: -0.42, z: 760,  size: 58, rx: 0.7, ry: 0.8, rz: 0.1, sx: 0.30, sy: 0.62, sz: -0.18, hue: "primary", phase: 4.0 },
+          { type: "cube", bx: -0.22, by:  0.40, z: 720,  size: 40, rx: 0.5, ry: 0.1, rz: 0.7, sx: 0.50, sy: 0.44, sz: -0.26, hue: "violet", phase: 5.2 },
+          { type: "oct",  bx:  0.04, by:  0.04, z: 980,  size: 68, rx: 0.2, ry: 0.6, rz: 0.3, sx: 0.24, sy: 0.46, sz: 0.16, hue: "primary", phase: 2.0 }
+        ];
+
+        // 3D Depth Constellation Nodes
+        const nodes = [];
+        for (let i = 0; i < 34; i++) {
+          const angle = (i / 34) * Math.PI * 2;
+          nodes.push({
+            x: (Math.random() - 0.5) * 1850,
+            y: (Math.random() - 0.5) * 1150,
+            z: 360 + Math.random() * 1100,
+            vx: Math.cos(angle) * (0.28 + Math.random() * 0.42),
+            vy: Math.sin(angle) * (0.24 + Math.random() * 0.38),
+            vz: (Math.random() - 0.5) * 0.55,
+            radius: 2.4 + Math.random() * 3.8,
             phase: Math.random() * Math.PI * 2,
-            kind: i % 3 === 0 ? "prism" : (i % 5 === 0 ? "ring" : "orb")
+            hue: i % 3 === 0 ? "teal" : (i % 5 === 0 ? "violet" : "primary")
           });
         }
 
-        function palette() {
+        function themeColors() {
           const dark = document.documentElement.getAttribute("data-theme") === "dark";
           if (dark) {
             return {
-              line: "92, 124, 250",
-              accent: "32, 201, 151",
-              node: "165, 180, 252",
-              lineA: 0.16,
-              ribbonA: 0.13,
-              dotA: 0.34
+              primary: "92, 124, 250",
+              teal: "32, 201, 151",
+              violet: "167, 139, 250",
+              faceBase: 0.10,
+              faceSpan: 0.15,
+              edgeAlpha: 0.36,
+              linkAlpha: 0.20,
+              nodeAlpha: 0.52
             };
           }
           return {
-            line: "59, 91, 219",
-            accent: "18, 184, 134",
-            node: "76, 110, 245",
-            lineA: 0.125,
-            ribbonA: 0.095,
-            dotA: 0.28
+            primary: "59, 91, 219",
+            teal: "13, 148, 136",
+            violet: "124, 58, 237",
+            faceBase: 0.08,
+            faceSpan: 0.14,
+            edgeAlpha: 0.32,
+            linkAlpha: 0.16,
+            nodeAlpha: 0.44
           };
         }
 
@@ -1116,142 +1170,189 @@
           ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
-        function project(x, y, z, camX, camY, rotY, rotX) {
-          const px = x - camX;
-          const py = y - camY;
-          const pz = z;
-          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-          const x1 = px * cosY - pz * sinY;
-          const z1 = px * sinY + pz * cosY;
-          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-          const y2 = py * cosX - z1 * sinX;
-          const z2 = py * sinX + z1 * cosX;
-          if (z2 < 90) return null;
-          const fov = Math.min(width, height) * 0.92 + 120;
-          const s = fov / z2;
-          return {
-            x: width * 0.5 + x1 * s,
-            y: height * 0.55 + y2 * s,
-            scale: s,
-            z: z2
-          };
+        function rotatePoint(p, rx, ry, rz) {
+          let x = p[0], y = p[1], z = p[2];
+          // X rotation
+          const cx = Math.cos(rx), sx = Math.sin(rx);
+          let y1 = y * cx - z * sx, z1 = y * sx + z * cx;
+          // Y rotation
+          const cy = Math.cos(ry), sy = Math.sin(ry);
+          let x2 = x * cy + z1 * sy, z2 = -x * sy + z1 * cy;
+          // Z rotation
+          const cz = Math.cos(rz), sz = Math.sin(rz);
+          let x3 = x2 * cz - y1 * sz, y3 = x2 * sz + y1 * cz;
+          return [x3, y3, z2];
+        }
+
+        function projectPt(wx, wy, wz) {
+          const pz = wz;
+          if (pz < 80) return null;
+          const fov = Math.min(width, height) * 0.96 + 160;
+          const s = fov / pz;
+          return { x: width * 0.5 + wx * s, y: height * 0.5 + wy * s, scale: s, z: pz };
+        }
+
+        function drawPolyhedron(shape, pal) {
+          const rgb = pal[shape.hue];
+          const bobX = Math.sin(time * 0.8 + shape.phase) * 28;
+          const bobY = Math.cos(time * 0.7 + shape.phase) * 24 - (scrollRatio - 0.5) * 90;
+          const depthFactor = 750 / shape.z;
+          const cx = shape.bx * Math.max(width, 960) * 0.92 + bobX - ptrX * (62 * depthFactor);
+          const cy = shape.by * Math.max(height, 680) * 0.88 + bobY - ptrY * (44 * depthFactor);
+          const cz = shape.z;
+
+          const rx = shape.rx + time * shape.sx * (1 + boost * 1.4);
+          const ry = shape.ry + time * shape.sy * (1 + boost * 1.4);
+          const rz = shape.rz + time * shape.sz * (1 + boost * 1.4);
+
+          if (shape.type === "ring") {
+            const segs = 32;
+            const ringPts = [];
+            for (let i = 0; i < segs; i++) {
+              const a = (i / segs) * Math.PI * 2;
+              const lp = [Math.cos(a) * shape.size, Math.sin(a) * shape.size, 0];
+              const rp = rotatePoint(lp, rx, ry, rz);
+              const pp = projectPt(cx + rp[0], cy + rp[1], cz + rp[2]);
+              if (pp) ringPts.push(pp);
+            }
+            if (ringPts.length > 2) {
+              ctx.beginPath();
+              ctx.moveTo(ringPts[0].x, ringPts[0].y);
+              for (let i = 1; i < ringPts.length; i++) ctx.lineTo(ringPts[i].x, ringPts[i].y);
+              ctx.closePath();
+              ctx.strokeStyle = "rgba(" + rgb + "," + (pal.edgeAlpha * 0.95).toFixed(3) + ")";
+              ctx.lineWidth = 1.8;
+              ctx.stroke();
+
+              // Orbiting tracer gem along ring perimeter
+              const gemIdx = Math.floor(((time * 8) % ringPts.length + ringPts.length) % ringPts.length);
+              const gem = ringPts[gemIdx];
+              ctx.fillStyle = "rgba(" + pal.teal + ",0.85)";
+              ctx.beginPath();
+              ctx.arc(gem.x, gem.y, Math.max(2.4, 3.6 * gem.scale), 0, Math.PI * 2);
+              ctx.fill();
+            }
+            return;
+          }
+
+          const verts = shape.type === "oct" ? OCT_VERTS : CUBE_VERTS;
+          const faces = shape.type === "oct" ? OCT_FACES : CUBE_FACES;
+          const worldV = verts.map(function (v) {
+            const r = rotatePoint([v[0] * shape.size, v[1] * shape.size, v[2] * shape.size], rx, ry, rz);
+            return [cx + r[0], cy + r[1], cz + r[2]];
+          });
+          const projV = worldV.map(function (w) { return projectPt(w[0], w[1], w[2]); });
+
+          // Painter-sort faces by average z descending + virtual light shading
+          const sortedFaces = faces.map(function (idxs) {
+            let zSum = 0;
+            for (let k = 0; k < idxs.length; k++) zSum += worldV[idxs[k]][2];
+            const v0 = worldV[idxs[0]], v1 = worldV[idxs[1]], v2 = worldV[idxs[2]];
+            const ux = v1[0] - v0[0], uy = v1[1] - v0[1], uz = v1[2] - v0[2];
+            const vx = v2[0] - v0[0], vy = v2[1] - v0[1], vz = v2[2] - v0[2];
+            const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+            const nlen = Math.hypot(nx, ny, nz) || 1;
+            const light = Math.max(0, (-0.45 * nx - 0.55 * ny - 0.7 * nz) / nlen);
+            return { idxs: idxs, avgZ: zSum / idxs.length, light: light };
+          }).sort(function (a, b) { return b.avgZ - a.avgZ; });
+
+          sortedFaces.forEach(function (f) {
+            if (f.idxs.some(function (idx) { return !projV[idx]; })) return;
+            ctx.beginPath();
+            ctx.moveTo(projV[f.idxs[0]].x, projV[f.idxs[0]].y);
+            for (let k = 1; k < f.idxs.length; k++) {
+              ctx.lineTo(projV[f.idxs[k]].x, projV[f.idxs[k]].y);
+            }
+            ctx.closePath();
+            const fAlpha = pal.faceBase + f.light * pal.faceSpan;
+            ctx.fillStyle = "rgba(" + rgb + "," + fAlpha.toFixed(3) + ")";
+            ctx.fill();
+            ctx.strokeStyle = "rgba(" + rgb + "," + (pal.edgeAlpha * (0.65 + f.light * 0.45)).toFixed(3) + ")";
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+          });
         }
 
         function frame() {
           ctx.clearRect(0, 0, width, height);
-          const pal = palette();
-          ptrX += (targetPtrX - ptrX) * 0.05;
-          ptrY += (targetPtrY - ptrY) * 0.05;
+          const pal = themeColors();
+          ptrX += (targetPtrX - ptrX) * 0.06;
+          ptrY += (targetPtrY - ptrY) * 0.06;
           boost += (targetBoost - boost) * 0.05;
-          scrollShift += (((window.scrollY || 0) * 0.08) - scrollShift) * 0.06;
+          const docH = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          scrollRatio += ((window.scrollY / docH) - scrollRatio) * 0.06;
 
-          time += prefersReduced ? 0 : 0.013 + boost * 0.018;
+          if (!prefersReduced) time += 0.015 + boost * 0.014;
 
-          const camX = ptrX * 95;
-          const camY = -195 + ptrY * 45 + Math.min(scrollShift, 90);
-          const rotY = ptrX * 0.09;
-          const rotX = 0.27 + ptrY * 0.05;
-
-          const grid = new Array(ROWS);
-          const startX = -((COLS - 1) * SX) / 2;
-          for (let r = 0; r < ROWS; r++) {
-            grid[r] = new Array(COLS);
-            const z = 200 + r * SZ;
-            for (let c = 0; c < COLS; c++) {
-              const x = startX + c * SX;
-              const w1 = Math.sin(c * 0.36 + time * 1.5) * 56;
-              const w2 = Math.cos(r * 0.44 - time * 1.15) * 44;
-              const w3 = Math.sin((c + r) * 0.24 + time * 0.9) * 28;
-              grid[r][c] = project(x, 165 + w1 + w2 + w3, z, camX, camY, rotY, rotX);
-            }
-          }
-
-          ctx.lineWidth = 1;
-          for (let r = 0; r < ROWS; r++) {
-            const fade = 1 - r / ROWS;
-            ctx.beginPath();
-            let started = false;
-            for (let c = 0; c < COLS; c++) {
-              const pt = grid[r][c];
-              if (!pt) { started = false; continue; }
-              if (!started) { ctx.moveTo(pt.x, pt.y); started = true; }
-              else ctx.lineTo(pt.x, pt.y);
-            }
-            ctx.strokeStyle = "rgba(" + pal.line + "," + (pal.lineA * (0.28 + fade * 0.95)).toFixed(3) + ")";
-            ctx.stroke();
-          }
-
-          for (let c = 0; c < COLS; c += 2) {
-            ctx.beginPath();
-            let started = false;
-            for (let r = 0; r < ROWS; r++) {
-              const pt = grid[r][c];
-              if (!pt) { started = false; continue; }
-              if (!started) { ctx.moveTo(pt.x, pt.y); started = true; }
-              else ctx.lineTo(pt.x, pt.y);
-            }
-            ctx.strokeStyle = "rgba(" + pal.accent + "," + pal.ribbonA.toFixed(3) + ")";
-            ctx.stroke();
-          }
-
-          for (let r = 0; r < ROWS - 3; r += 2) {
-            const fade = 1 - r / ROWS;
-            for (let c = 0; c < COLS; c += 2) {
-              const pt = grid[r][c];
-              if (!pt) continue;
-              const rad = Math.max(0.9, 2.3 * pt.scale);
-              ctx.fillStyle = "rgba(" + pal.node + "," + (pal.dotA * fade).toFixed(3) + ")";
-              ctx.beginPath();
-              ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-
-          for (let i = 0; i < particles.length; i++) {
-            const p = particles[i];
+          // Update & project 3D constellation nodes
+          const projectedNodes = [];
+          for (let i = 0; i < nodes.length; i++) {
+            const n = nodes[i];
             if (!prefersReduced) {
-              p.z -= p.speed * (1.25 + boost * 2.2);
-              p.y += Math.sin(time * 1.5 + p.phase) * 0.42;
-              if (p.z < 120) {
-                p.z = 2100;
-                p.x = (Math.random() - 0.5) * 2600;
-                p.y = (Math.random() - 0.5) * 1100 - 110;
+              n.x += n.vx * (1 + boost * 1.6);
+              n.y += n.vy * (1 + boost * 1.6) + Math.sin(time + n.phase) * 0.18;
+              n.z += n.vz * (1 + boost * 1.6);
+              if (n.x < -980) n.x = 980; else if (n.x > 980) n.x = -980;
+              if (n.y < -620) n.y = 620; else if (n.y > 620) n.y = -620;
+              if (n.z < 300) n.z = 1480; else if (n.z > 1480) n.z = 300;
+            }
+            const pr = projectPt(
+              n.x - ptrX * 85,
+              n.y - ptrY * 60 - (scrollRatio - 0.5) * 140,
+              n.z
+            );
+            if (pr && pr.x > -60 && pr.x < width + 60 && pr.y > -60 && pr.y < height + 60) {
+              projectedNodes.push({ n: n, p: pr });
+            }
+          }
+
+          // Connect nearby 3D nodes + subtle interactive cursor magnetic filaments
+          ctx.lineWidth = 1;
+          for (let i = 0; i < projectedNodes.length; i++) {
+            const a = projectedNodes[i];
+            for (let j = i + 1; j < projectedNodes.length; j++) {
+              const b = projectedNodes[j];
+              const dx = a.p.x - b.p.x;
+              const dy = a.p.y - b.p.y;
+              const d = Math.hypot(dx, dy);
+              if (d < 175) {
+                const alpha = (1 - d / 175) * pal.linkAlpha;
+                ctx.strokeStyle = "rgba(" + pal.primary + "," + alpha.toFixed(3) + ")";
+                ctx.beginPath();
+                ctx.moveTo(a.p.x, a.p.y);
+                ctx.lineTo(b.p.x, b.p.y);
+                ctx.stroke();
               }
             }
-            const proj = project(p.x, p.y, p.z, camX, camY, rotY, rotX);
-            if (!proj || proj.x < -50 || proj.x > width + 50 || proj.y < -50 || proj.y > height + 50) continue;
-            const depthNorm = Math.max(0, Math.min(1, 1 - proj.z / 2150));
-            const sz = Math.max(1.2, p.size * proj.scale * 2.3);
-            const alpha = 0.16 + depthNorm * 0.48;
-
-            if (p.kind === "prism") {
-              ctx.save();
-              ctx.translate(proj.x, proj.y);
-              ctx.rotate(time * 0.55 + p.phase);
-              ctx.strokeStyle = "rgba(" + pal.line + "," + alpha.toFixed(3) + ")";
-              ctx.lineWidth = 1.25;
-              ctx.strokeRect(-sz, -sz, sz * 2, sz * 2);
-              ctx.beginPath();
-              ctx.moveTo(0, -sz * 1.35);
-              ctx.lineTo(sz * 1.35, 0);
-              ctx.lineTo(0, sz * 1.35);
-              ctx.lineTo(-sz * 1.35, 0);
-              ctx.closePath();
-              ctx.strokeStyle = "rgba(" + pal.accent + "," + (alpha * 0.72).toFixed(3) + ")";
-              ctx.stroke();
-              ctx.restore();
-            } else if (p.kind === "ring") {
-              ctx.strokeStyle = "rgba(" + pal.accent + "," + (alpha * 0.85).toFixed(3) + ")";
-              ctx.lineWidth = 1.3;
-              ctx.beginPath();
-              ctx.arc(proj.x, proj.y, sz * 1.35, 0, Math.PI * 2);
-              ctx.stroke();
-            } else {
-              ctx.fillStyle = "rgba(" + pal.node + "," + alpha.toFixed(3) + ")";
-              ctx.beginPath();
-              ctx.arc(proj.x, proj.y, sz, 0, Math.PI * 2);
-              ctx.fill();
+            if (mouseScreenX > 0) {
+              const md = Math.hypot(a.p.x - mouseScreenX, a.p.y - mouseScreenY);
+              if (md < 185) {
+                const ma = (1 - md / 185) * pal.edgeAlpha * 0.9;
+                ctx.strokeStyle = "rgba(" + pal.teal + "," + ma.toFixed(3) + ")";
+                ctx.beginPath();
+                ctx.moveTo(a.p.x, a.p.y);
+                ctx.lineTo(mouseScreenX, mouseScreenY);
+                ctx.stroke();
+              }
             }
+          }
+
+          // Draw constellation orbs
+          for (let i = 0; i < projectedNodes.length; i++) {
+            const item = projectedNodes[i];
+            const rgb = pal[item.n.hue];
+            const depthNorm = Math.max(0.15, Math.min(1, 1 - (item.p.z - 280) / 1220));
+            const r = Math.max(1.4, item.n.radius * item.p.scale * 1.45);
+            ctx.fillStyle = "rgba(" + rgb + "," + (pal.nodeAlpha * depthNorm).toFixed(3) + ")";
+            ctx.beginPath();
+            ctx.arc(item.p.x, item.p.y, r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Painter-sort and render hero 3D rotating polyhedra & rings back-to-front
+          const orderedShapes = polyhedra.slice().sort(function (a, b) { return b.z - a.z; });
+          for (let i = 0; i < orderedShapes.length; i++) {
+            drawPolyhedron(orderedShapes[i], pal);
           }
 
           if (!prefersReduced) requestAnimationFrame(frame);
@@ -1260,8 +1361,14 @@
         window.addEventListener("resize", resize, { passive: true });
         window.addEventListener("pointermove", function (e) {
           if (!width || !height) return;
+          mouseScreenX = e.clientX;
+          mouseScreenY = e.clientY;
           targetPtrX = (e.clientX / width - 0.5) * 2;
           targetPtrY = (e.clientY / height - 0.5) * 2;
+        }, { passive: true });
+        window.addEventListener("pointerleave", function () {
+          mouseScreenX = -9999;
+          mouseScreenY = -9999;
         }, { passive: true });
 
         document.querySelectorAll(".dl-card").forEach(function (card) {
@@ -1325,9 +1432,10 @@
       const revealEls = document.querySelectorAll(".reveal-item");
       function revealVisibleNow() {
         const vh = window.innerHeight || 900;
+        const nearBottom = (window.scrollY + vh) >= (document.documentElement.scrollHeight - 80);
         revealEls.forEach(function (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top < vh * 1.05) el.classList.add("is-visible");
+          if (nearBottom || rect.top < vh * 1.15) el.classList.add("is-visible");
         });
       }
       if ("IntersectionObserver" in window && !prefersReduced) {
@@ -1405,19 +1513,22 @@
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeLb(); closeSoon(); } });
 
       // 9. Animated Count-Up for Live GitHub Release Download Stats
-      function animateCounter(el, targetTotal, totalApk, totalMsi) {
+      function animateCounter(el, targetApk, targetMsi) {
         if (!el) return;
+        const targetTotal = targetApk + targetMsi;
         if (prefersReduced || targetTotal <= 0) {
-          el.innerHTML = "<strong>" + targetTotal + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
+          el.innerHTML = "<strong>" + targetTotal + "</strong> total downloads (" + targetApk + " Android &bull; " + targetMsi + " Windows)";
           return;
         }
-        const duration = 700;
+        const duration = 500;
         const start = performance.now();
         function tick(now) {
           const p = Math.min(1, (now - start) / duration);
           const eased = 1 - Math.pow(1 - p, 3);
-          const cur = Math.round(targetTotal * eased);
-          el.innerHTML = "<strong>" + cur + "</strong> total downloads (" + totalApk + " Android &bull; " + totalMsi + " Windows)";
+          const curApk = Math.round(targetApk * eased);
+          const curMsi = Math.round(targetMsi * eased);
+          const curTotal = curApk + curMsi;
+          el.innerHTML = "<strong>" + curTotal + "</strong> total downloads (" + curApk + " Android &bull; " + curMsi + " Windows)";
           if (p < 1) requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
@@ -1455,7 +1566,7 @@
             }
           });
 
-          animateCounter(document.getElementById("liveDownloadStats"), totalApk + totalMsi, totalApk, totalMsi);
+          animateCounter(document.getElementById("liveDownloadStats"), totalApk, totalMsi);
         })
         .catch(function () {});
     })();
