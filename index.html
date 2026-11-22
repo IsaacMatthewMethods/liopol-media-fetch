@@ -283,31 +283,6 @@
       100% { background-position: -200% 0; }
     }
 
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 14px;
-      margin-bottom: 14px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
-    }
-    .kicker-spark {
-      display: inline-block;
-      animation: sparkSpin 5s linear infinite;
-    }
-    @keyframes sparkSpin {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.18); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-
     h1 {
       margin: 0 0 12px;
       font-size: clamp(2rem, 4.4vw, 2.85rem);
@@ -735,10 +710,6 @@
 
     <section class="hero-card" id="heroCard">
       <div class="hero-spotlight" aria-hidden="true"></div>
-      <div class="hero-kicker">
-        <span class="kicker-spark" aria-hidden="true">&#10022;</span>
-        <span>Fast Private Device Downloads</span>
-      </div>
       <h1>LMF Downloader</h1>
       <p class="subtitle">
         Search, stream previews, and save HD videos or MP3 audio directly onto your Android phone or Windows PC—with built-in trending discovery, batch playlists, background downloads, and instant Android link sharing.
