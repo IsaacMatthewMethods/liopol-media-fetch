@@ -5,7 +5,7 @@ Official release distribution for **LMF Downloader** on Android and Windows.
 ## Download Latest Release (v1.0.4)
 - **Android APK (111.36 MB):** [Download LiopolMediaFetch-1.0.4-android.apk](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.4/LiopolMediaFetch-1.0.4-android.apk)
 - **Windows MSI (535.18 MB):** [Download LiopolMediaFetch-1.0.4-win64.msi](https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.4/LiopolMediaFetch-1.0.4-win64.msi)
-- **Landing Page:** http://apps.shemalabs.cloud/
+- **Landing Page:** https://apps.shemalabs.cloud/
 
 ## In-App Updates
 LMF Downloader checks Firestore live OTA policy and [`update.json`](update.json) on startup (and via **Settings -> About Us -> Check for Updates**), downloads upgrades with a live progress bar, verifies SHA-256 checksums, and installs cleanly in place.
