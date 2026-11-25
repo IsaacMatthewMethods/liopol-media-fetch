@@ -3,16 +3,16 @@
   "min_required_version": "1.0.0",
   "release_url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/tag/v1.0.5",
   "notes": "LMF Downloader v1.0.5 introduces the LMF>> Obsidian Cinema Hub (Movies, TV Shows, Spotlight Search) plus a rebuilt native mobile UI.",
-  "published_at": "2026-11-25T04:52:15Z",
+  "published_at": "2026-11-25T14:48:01Z",
   "android": {
     "version_code": 105,
     "url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.5/LiopolMediaFetch-1.0.5-android.apk",
-    "sha256": "dfc8404236320627851879873ae496cc4d8809bb02287a9c76d568cfc753de8e",
-    "size_bytes": 116842926
+    "sha256": "6497d0c73ab52989906383418fb3230789e40b227c938652eefa45a5126371ae",
+    "size_bytes": 116860770
   },
   "windows": {
     "url": "https://github.com/IsaacMatthewMethods/liopol-media-fetch/releases/download/v1.0.5/LiopolMediaFetch-1.0.5-win64.msi",
-    "sha256": "88459b3970d77e54a6d72dda1fbc9814f30f93d0cdde602adb09f52c4b769cba",
-    "size_bytes": 561389568
+    "sha256": "9aab51417f9f311bdf901a9b2bf15f7da8c843d72040c061a8ff846bbe421234",
+    "size_bytes": 561426432
   }
 }
